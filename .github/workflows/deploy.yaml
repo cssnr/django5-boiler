@@ -1,0 +1,59 @@
+name: "Deploy"
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - webhook
+  #release:
+  #  types:
+  #    - published
+
+env:
+  STACK_NAME: django5-boiler
+  STACK_FILE: docker-compose-swarm.yaml
+  CONFIG_FILE: services/shane/django5-boiler/settings.env
+
+jobs:
+  deploy:
+    name: "Deploy"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Find and Replace"
+        uses: jacobtomlinson/gha-find-replace@v3
+        with:
+          find: "STACK_NAME"
+          replace: ${{ env.STACK_NAME}}
+          include: ${{ env.STACK_FILE}}
+          regex: false
+
+      - name: "Debug"
+        run: |
+          env
+          cat ${{ env.STACK_FILE}}
+
+      - name: "Checkout Service Configs"
+        uses: actions/checkout@v4
+        with:
+          repository: "hosted-domains/service-configs"
+          ssh-key: ${{ secrets.SERVICE_CONFIGS_KEY }}
+          ref: master
+          path: service-configs
+          sparse-checkout: |
+            ${{ env.CONFIG_FILE }}
+          sparse-checkout-cone-mode: false
+
+      - name: "Portainer Deploy"
+        uses: cssnr/portainer-stack-deploy-action@v1
+        with:
+          url: ${{ secrets.PORTAINER_URL }}
+          token: ${{ secrets.PORTAINER_TOKEN }}
+          file: ${{ env.STACK_FILE}}
+          name: ${{ env.STACK_NAME}}
+          type: file
+          env_file: ${{ env.CONFIG_FILE}}
