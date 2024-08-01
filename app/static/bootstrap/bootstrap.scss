@@ -1,0 +1,10 @@
+// Change primary color
+$primary: #6b6fbf;
+
+@import '../../../node_modules/bootstrap/scss/bootstrap';
+
+// Change info button text to white
+.btn-info {
+    --bs-btn-color: var(--bs-white);
+    --bs-btn-hover-color: var(--bs-white);
+}

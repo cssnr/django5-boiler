@@ -10,7 +10,7 @@ gulp.task('animate', () => {
 gulp.task('bootstrap', () => {
     return gulp
         .src([
-            'node_modules/bootstrap/dist/css/bootstrap.min.css',
+            // 'node_modules/bootstrap/dist/css/bootstrap.min.css',
             'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
         ])
         .pipe(gulp.dest('app/static/dist/bootstrap'))
