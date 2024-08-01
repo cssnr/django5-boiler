@@ -2,7 +2,7 @@
   "name": "django5-boiler",
   "scripts": {
     "postinstall": "npx gulp && npm run sass",
-    "sass": "npx sass app/static/bootstrap/bootstrap.scss app/static/dist/bootstrap/bootstrap.min.css --style=compressed",
+    "sass": "npx sass app/static/bootstrap/bootstrap.scss app/static/bootstrap/bootstrap.css --style=compressed --no-source-map",
     "sass:watch": "npm run sass -- --watch"
   },
   "dependencies": {

@@ -12,3 +12,4 @@
 settings.env
 *.sqlite3
 node_modules/
+app/static/bootstrap/bootstrap.css
