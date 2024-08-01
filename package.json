@@ -3,7 +3,7 @@
   "scripts": {
     "postinstall": "npx gulp && npm run sass",
     "sass": "npx sass app/static/bootstrap/bootstrap.scss app/static/dist/bootstrap/bootstrap.min.css --style=compressed",
-    "sass:watch": "npx sass --watch app/static/bootstrap/bootstrap.scss app/static/dist/bootstrap/bootstrap.min.css --style=compressed"
+    "sass:watch": "npm run sass -- --watch"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.6.0",
