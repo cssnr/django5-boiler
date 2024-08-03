@@ -17,6 +17,7 @@ Coming soon...
 ```shell
 cp settings.env.example settings.env
 vim settings.env
+set -a; source settings.env; set +a
 npm install
-docker compose -f docker-compose-dev.yaml up --build --remove-orphans -d --force-recreate
+docker compose -f docker-compose-dev.yaml up --build --remove-orphans --force-recreate
 ```

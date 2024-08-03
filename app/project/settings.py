@@ -215,8 +215,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 if DEBUG:
     def show_toolbar(request):
-        # return True if request.user.is_staff else False
-        return True
+        return True if request.user.is_staff else False
+        # return True
     DEBUG_TOOLBAR_CONFIG = {'SHOW_TOOLBAR_CALLBACK': show_toolbar}
     DEBUG_TOOLBAR_PANELS = [
         'debug_toolbar.panels.versions.VersionsPanel',

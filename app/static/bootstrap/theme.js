@@ -38,6 +38,9 @@
     const showActiveTheme = (theme) => {
         // console.debug(`showActiveTheme: ${theme}`)
         const themeIcon = document.querySelector('#theme-icon')
+        if (!themeIcon) {
+            return console.debug('No Theme Icon to Set.')
+        }
         document.querySelectorAll('[data-bs-theme-value]').forEach((el) => {
             if (el.dataset.bsThemeValue === theme) {
                 const i = el.querySelector('i')

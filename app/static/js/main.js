@@ -41,7 +41,7 @@ if (typeof ClipboardJS !== 'undefined') {
     })
 }
 
-function domContentLoaded() {
+async function domContentLoaded() {
     // Show custom django-toast classes on load
     $('.django-toast').each(function () {
         const toast = new bootstrap.Toast($(this))
@@ -49,6 +49,31 @@ function domContentLoaded() {
         $(this).on('mousemove', () => toast.hide())
         toast.show()
     })
+
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+        await registerServiceWorker()
+    }
+}
+
+async function registerServiceWorker() {
+    try {
+        const registration = await navigator.serviceWorker.register('/sw.js', {
+            scope: '/',
+        })
+        console.debug('registerServiceWorker:', registration)
+        if (registration.installing) {
+            console.debug('Service worker: installing')
+        } else if (registration.waiting) {
+            console.debug('Service worker: installed')
+        } else if (registration.active) {
+            console.debug('Service worker: active')
+        } else {
+            console.warn('Service worker UNKNOWN:', registration)
+        }
+    } catch (error) {
+        console.error('Service Worker Error:', error)
+    }
 }
 
 /**
