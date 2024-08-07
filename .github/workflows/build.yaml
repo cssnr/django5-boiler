@@ -39,10 +39,12 @@ jobs:
           npm install
 
       - name: "Update Cache Version"
+        env:
+          SERVICE_WORKER: app/static/js/sw.js
         run: |
           echo "Updating Cache to Version: v${GITHUB_RUN_NUMBER}"
-          sed -i "0,/v1/s//v${GITHUB_RUN_NUMBER}/" src/sw.js
-          head Capp/static/js/sw.js -n 4
+          sed -i "0,/v1/s//v${GITHUB_RUN_NUMBER}/" ${SERVICE_WORKER}
+          head ${SERVICE_WORKER} -n 4
 
       - name: "Docker Login"
         uses: docker/login-action@v2
