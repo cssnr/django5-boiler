@@ -42,7 +42,7 @@ jobs:
         run: |
           echo "Updating Cache to Version: v${GITHUB_RUN_NUMBER}"
           sed -i "0,/v1/s//v${GITHUB_RUN_NUMBER}/" src/sw.js
-          head src/sw.js -n 4
+          head Capp/static/js/sw.js -n 4
 
       - name: "Docker Login"
         uses: docker/login-action@v2
