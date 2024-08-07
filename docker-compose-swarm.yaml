@@ -158,7 +158,7 @@ networks:
 
 secrets:
   cssnr_basic_http_auth:
-    file: ~/basic_http_auth
+    external: true
 
 volumes:
   data_dir:
