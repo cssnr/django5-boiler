@@ -47,7 +47,7 @@ services:
       resources:
         limits:
           cpus: "2.0"
-          memory: 128M
+          memory: 256M
     volumes:
       #- data_dir:/data
       - ${APP_FILES_STATIC:-./app/static}:/data/static
