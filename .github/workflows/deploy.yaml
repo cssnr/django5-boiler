@@ -12,7 +12,7 @@ on:
 env:
   STACK_NAME: django5-boiler
   STACK_FILE: docker-compose-swarm.yaml
-  CONFIG_FILE: services/shane/django5-boiler/settings.env
+  CONFIG_FILE: services/shane/django5-boiler/prod.env
 
 jobs:
   deploy:
@@ -48,6 +48,10 @@ jobs:
             ${{ env.CONFIG_FILE }}
           sparse-checkout-cone-mode: false
 
+      - name: "Parse Environment"
+        id: parse
+        uses: smashedr/env-json-action@master
+
       - name: "Portainer Deploy"
         uses: cssnr/portainer-stack-deploy-action@v1
         with:
@@ -56,4 +60,4 @@ jobs:
           file: ${{ env.STACK_FILE}}
           name: ${{ env.STACK_NAME}}
           type: file
-          env_file: ${{ env.CONFIG_FILE}}
+          env_json: "${{ steps.parse.outputs.result }}"

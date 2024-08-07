@@ -31,12 +31,12 @@ const resources = [
 ]
 
 const addResourcesToCache = async (resources) => {
+    console.debug('%c addResourcesToCache:', 'color: Cyan', resources)
     try {
-        console.debug('%c addResourcesToCache:', 'color: Cyan', resources)
         const cache = await caches.open(cacheName)
         await cache.addAll(resources)
     } catch (e) {
-        console.warn(`e: ${e.message}`, e)
+        console.error(`cache.addAll error: ${e.message}`, e)
     }
 }
 
@@ -48,8 +48,12 @@ const putInCache = async (request, response) => {
         request,
         response
     )
-    const cache = await caches.open(cacheName)
-    await cache.put(request, response)
+    try {
+        const cache = await caches.open(cacheName)
+        await cache.put(request, response)
+    } catch (e) {
+        console.error(`cache.put error: ${e.message}`, e)
+    }
 }
 
 const cleanupCache = async (event) => {
@@ -59,7 +63,11 @@ const cleanupCache = async (event) => {
     for (const key of keys) {
         if (key !== cacheName) {
             console.log('%c Removing Old Cache:', 'color: Yellow', `${key}`)
-            await caches.delete(key)
+            try {
+                await caches.delete(key)
+            } catch (e) {
+                console.error(`caches.delete error: ${e.message}`, e)
+            }
         }
     }
 }
