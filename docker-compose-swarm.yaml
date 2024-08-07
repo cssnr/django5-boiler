@@ -4,7 +4,7 @@ services:
   nginx:
     build:
       context: nginx
-    image: ghcr.io/smashedr/django5-boiler/django5-boiler-nginx:${VERSION:-latest}
+    image: ghcr.io/smashedr/django5-boiler-nginx:${VERSION:-latest}
     deploy:
       mode: global
       resources:
@@ -46,7 +46,7 @@ services:
   app:
     build:
       context: app
-    image: ghcr.io/smashedr/django5-boiler/django5-boiler-app:${VERSION:-latest}
+    image: ghcr.io/smashedr/django5-boiler-app:${VERSION:-latest}
     #env_file: stack.env
     command: "gunicorn project.asgi:application -b 0.0.0.0:9000 -w 2 -k uvicorn.workers.UvicornWorker"
     healthcheck:
@@ -69,7 +69,7 @@ services:
       - internal
 
   worker:
-    image: ghcr.io/smashedr/django5-boiler/django5-boiler-app:${VERSION:-latest}
+    image: ghcr.io/smashedr/django5-boiler-app:${VERSION:-latest}
     #env_file: stack.env
     command: "celery -A project worker -l INFO -c 2"
     deploy:
@@ -82,7 +82,7 @@ services:
       - internal
 
   beat:
-    image: ghcr.io/smashedr/django5-boiler/django5-boiler-app:${VERSION:-latest}
+    image: ghcr.io/smashedr/django5-boiler-app:${VERSION:-latest}
     #env_file: stack.env
     command: "celery -A project beat -l INFO -S django"
     deploy:
