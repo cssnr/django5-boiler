@@ -47,7 +47,7 @@ services:
     build:
       context: app
     image: ghcr.io/smashedr/django5-boiler/django5-boiler-app:${VERSION:-latest}
-    env_file: settings.env
+    env_file: stack.env
     command: "gunicorn project.asgi:application -b 0.0.0.0:9000 -w 2 -k uvicorn.workers.UvicornWorker"
     healthcheck:
       test: ["CMD", "curl", "-sf", "http://localhost:9000/app-health-check/"]
@@ -70,7 +70,7 @@ services:
 
   worker:
     image: ghcr.io/smashedr/django5-boiler/django5-boiler-app:${VERSION:-latest}
-    env_file: settings.env
+    env_file: stack.env
     command: "celery -A project worker -l INFO -c 2"
     deploy:
       replicas: 1
@@ -83,7 +83,7 @@ services:
 
   beat:
     image: ghcr.io/smashedr/django5-boiler/django5-boiler-app:${VERSION:-latest}
-    env_file: settings.env
+    env_file: stack.env
     command: "celery -A project beat -l INFO -S django"
     deploy:
       replicas: 1
@@ -122,7 +122,7 @@ services:
 
   flower:
     image: mher/flower:1.2
-    env_file: settings.env
+    env_file: stack.env
     command: "celery flower --enable_events=False --url_prefix=flower"
     deploy:
       replicas: 1
@@ -137,7 +137,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin:latest
-    env_file: settings.env
+    env_file: stack.env
     environment:
       - APACHE_PORT=8082
       - PMA_ABSOLUTE_URI=/phpmyadmin/
