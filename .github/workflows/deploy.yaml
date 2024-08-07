@@ -51,6 +51,8 @@ jobs:
       - name: "Parse Environment"
         id: parse
         uses: smashedr/env-json-action@master
+        with:
+          source: ${{ env.CONFIG_FILE }}
 
       - name: "Portainer Deploy"
         uses: cssnr/portainer-stack-deploy-action@v1
