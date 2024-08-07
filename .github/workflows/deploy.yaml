@@ -12,6 +12,7 @@ on:
 env:
   STACK_NAME: django5-boiler
   STACK_FILE: docker-compose-swarm.yaml
+  CONFIG_PATH: service-configs
   CONFIG_FILE: services/shane/django5-boiler/prod.env
 
 jobs:
@@ -43,7 +44,7 @@ jobs:
           repository: "hosted-domains/service-configs"
           ssh-key: ${{ secrets.SERVICE_CONFIGS_KEY }}
           ref: master
-          path: service-configs
+          path: ${{ env.CONFIG_PATH }}
           sparse-checkout: |
             ${{ env.CONFIG_FILE }}
           sparse-checkout-cone-mode: false
@@ -52,7 +53,7 @@ jobs:
         id: parse
         uses: smashedr/env-json-action@master
         with:
-          source: ${{ env.CONFIG_FILE }}
+          source: ${{ env.CONFIG_PATH }}/${{ env.CONFIG_FILE }}
 
       - name: "Portainer Deploy"
         uses: cssnr/portainer-stack-deploy-action@v1
