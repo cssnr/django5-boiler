@@ -33,7 +33,8 @@ def flush_template_cache():
 def clear_news_cache():
     # Clear News cache on model update
     logger.debug('clear_news_cache')
-    return cache.delete(make_template_fragment_key('news_body'))
+    # return cache.delete(make_template_fragment_key('news_body'))
+    return cache.delete_pattern('template.cache.news_body.*')
 
 
 @shared_task()

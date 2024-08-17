@@ -51,7 +51,7 @@ jobs:
 
       - name: "Parse Environment"
         id: parse
-        uses: smashedr/env-json-action@master
+        uses: cssnr/env-json-action@master
         with:
           source: ${{ env.CONFIG_PATH }}/${{ env.CONFIG_FILE }}
 
