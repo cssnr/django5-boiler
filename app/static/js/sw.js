@@ -22,7 +22,7 @@ const resources = [
     '/static/dist/bootstrap/bootstrap.bundle.min.js',
     '/static/dist/clipboard/clipboard.min.js',
     '/static/dist/fontawesome/css/all.min.css',
-    '/static/dist/fontawesome/js/all.min.js',
+    // '/static/dist/fontawesome/js/all.min.js',
     '/static/dist/fontawesome/webfonts/fa-brands-400.woff2',
     '/static/dist/fontawesome/webfonts/fa-regular-400.woff2',
     '/static/dist/fontawesome/webfonts/fa-solid-900.woff2',
