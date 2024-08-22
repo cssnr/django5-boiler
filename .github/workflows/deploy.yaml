@@ -64,3 +64,9 @@ jobs:
           name: ${{ env.STACK_NAME}}
           type: file
           env_json: "${{ steps.parse.outputs.result }}"
+
+      - name: "Purge Cache"
+        uses: cssnr/cloudflare-purge-cache-action@v1
+        with:
+          token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          domains: cssnr.com
