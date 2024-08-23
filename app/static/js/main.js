@@ -63,16 +63,16 @@ async function registerServiceWorker() {
         })
         console.debug('registerServiceWorker:', registration)
         if (registration.installing) {
-            console.debug('Service worker: installing')
+            console.debug('Service Worker: installing')
         } else if (registration.waiting) {
-            console.debug('Service worker: installed')
+            console.debug('Service Worker: waiting')
         } else if (registration.active) {
-            console.debug('Service worker: active')
+            console.debug('Service Worker: active')
         } else {
-            console.warn('Service worker UNKNOWN:', registration)
+            console.warn('Service Worker Registration Unknown:', registration)
         }
     } catch (error) {
-        console.error('Service Worker Error:', error)
+        console.error('Service Worker Registration Error:', error)
     }
 }
 

@@ -63,3 +63,8 @@ jobs:
         with:
           files: docker-bake.json
           push: true
+
+      - name: "Trigger Deploy"
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: deploy.yaml
