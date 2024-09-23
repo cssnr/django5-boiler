@@ -103,8 +103,8 @@ const networkFirst = async (event) => {
     try {
         const responseFromNetwork = await fetch(event.request)
         if (responseFromNetwork?.ok) {
-            // await putInCache(event.request, responseFromNetwork.clone())
-            putInCache(event.request, responseFromNetwork.clone()).then()
+            // noinspection ES6MissingAwait
+            putInCache(event.request, responseFromNetwork.clone())
             return responseFromNetwork
         }
     } catch (e) {
@@ -145,6 +145,7 @@ self.addEventListener('fetch', fetchResponse)
 
 self.addEventListener('install', (event) => {
     console.debug('%c install:', 'color: Cyan', event)
+    // noinspection JSIgnoredPromiseFromCall
     self.skipWaiting()
     event.waitUntil(addResourcesToCache(resources))
 })
