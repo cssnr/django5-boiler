@@ -13,7 +13,7 @@ RUN python3 -m pip install --no-cache-dir --upgrade pip  &&\
 
 FROM python:3.11-alpine
 
-LABEL org.opencontainers.image.source="https://github.com/smashedr/django5-boiler"
+LABEL org.opencontainers.image.source="https://github.com/cssnr/django5-boiler"
 LABEL org.opencontainers.image.description="Django 5 Boiler Plate"
 LABEL org.opencontainers.image.authors="smashedr"
 

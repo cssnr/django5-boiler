@@ -54,7 +54,7 @@ services:
   nginx:
     build:
       context: nginx
-    image: ghcr.io/smashedr/django5-boiler-nginx:${VERSION:-latest}
+    image: ghcr.io/cssnr/django5-boiler-nginx:${VERSION:-latest}
     deploy:
       mode: global
       resources:
@@ -96,7 +96,7 @@ services:
   app:
     build:
       context: app
-    image: ghcr.io/smashedr/django5-boiler-app:${VERSION:-latest}
+    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:-latest}
     #env_file: stack.env
     environment:
       <<: *common-env-vars
@@ -121,7 +121,7 @@ services:
       - internal
 
   worker:
-    image: ghcr.io/smashedr/django5-boiler-app:${VERSION:-latest}
+    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:-latest}
     #env_file: stack.env
     environment:
       <<: *common-env-vars
@@ -140,7 +140,7 @@ services:
       - internal
 
   beat:
-    image: ghcr.io/smashedr/django5-boiler-app:${VERSION:-latest}
+    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:-latest}
     #env_file: stack.env
     environment:
       <<: *common-env-vars

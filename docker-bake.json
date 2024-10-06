@@ -8,14 +8,14 @@
     "app": {
       "context": "app",
       "dockerfile": "Dockerfile",
-      "tags": ["ghcr.io/smashedr/django5-boiler-app:latest"],
+      "tags": ["ghcr.io/cssnr/django5-boiler-app:latest"],
       "platforms": ["linux/amd64", "linux/arm64"],
       "output": ["type=image,push=true"]
     },
     "nginx": {
       "context": "nginx",
       "dockerfile": "Dockerfile",
-      "tags": ["ghcr.io/smashedr/django5-boiler-nginx:latest"],
+      "tags": ["ghcr.io/cssnr/django5-boiler-nginx:latest"],
       "platforms": ["linux/amd64", "linux/arm64"],
       "output": ["type=image,push=true"]
     }
