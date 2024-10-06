@@ -1,12 +1,12 @@
 // Form Submit Handler
 
-document.querySelectorAll('input.form-control').forEach((el) => {
+document.querySelectorAll('.form-control').forEach((el) => {
     el.addEventListener('focus', () => {
         el.classList.remove('is-invalid')
     })
 })
 
-document.querySelector('form.submit').addEventListener('submit', formSubmit)
+document.querySelector('form.submit')?.addEventListener('submit', formSubmit)
 
 async function formSubmit(event) {
     event.preventDefault()
@@ -41,7 +41,7 @@ async function formSubmit(event) {
             event.target.classList.add('d-none')
             document
                 .querySelector(event.target.dataset.success)
-                .classList.remove('d-none')
+                ?.classList.remove('d-none')
         } else if (json.error) {
             console.debug('Error Message')
             showToast(json.error, 'danger')
@@ -49,9 +49,10 @@ async function formSubmit(event) {
             console.debug('Loop Errors')
             for (const [key, value] of Object.entries(json)) {
                 console.debug(`${key}: ${value}`)
-                const input = event.target.querySelector(`input[name="${key}"]`)
-                input.classList.add('is-invalid')
-                input.nextElementSibling.textContent = value.toString()
+                const el = event.target.querySelector(`[name="${key}"]`)
+                console.debug('el:', el)
+                el.classList.add('is-invalid')
+                el.nextElementSibling.textContent = value.toString()
             }
         }
     } catch (error) {
