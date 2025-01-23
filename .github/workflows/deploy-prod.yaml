@@ -9,10 +9,10 @@ on:
   #  branches-ignore:
   #    - master
 
-env:
-  STACK_NAME: prod_django5-boiler
-  STACK_FILE: docker-compose-swarm.yaml
-  CONFIG_FILE: services/shane/django5-boiler/prod.env
+#env:
+#  STACK_NAME: prod_django5-boiler
+#  STACK_FILE: docker-compose-swarm.yaml
+#  CONFIG_FILE: services/shane/django5-boiler/prod.env
 
 jobs:
   build:
@@ -33,9 +33,9 @@ jobs:
     permissions:
       contents: read
     with:
-      STACK_NAME: ${{ env.STACK_NAME}}
-      STACK_FILE: ${{ env.STACK_FILE}}
-      CONFIG_FILE: ${{ env.CONFIG_FILE}}
+      STACK_NAME: prod_django5-boiler
+      STACK_FILE: docker-compose-swarm.yaml
+      CONFIG_FILE: services/shane/django5-boiler/prod.env
     secrets:
       SERVICE_CONFIGS_KEY: ${{ secrets.SERVICE_CONFIGS_KEY }}
       PORTAINER_URL: ${{ secrets.PORTAINER_URL }}
