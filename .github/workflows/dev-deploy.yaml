@@ -1,41 +1,27 @@
-name: "Deploy Dev"
+name: "Dev Deploy"
 
 on:
   workflow_dispatch:
-  repository_dispatch:
-    types:
-      - webhook
-  push:
-    branches-ignore:
-      - master
-
-#env:
-#  STACK_NAME: dev_django5-boiler
-#  STACK_FILE: docker-compose-swarm.yaml
-#  CONFIG_FILE: services/shane/django5-boiler/dev.env
+    inputs:
+      TAG:
+        description: "Tag to Deploy"
+        type: string
+        required: true
+        default: "Dev"
+      CLEANUP:
+        description: "Run Cleanup Steps"
+        type: boolean
+        required: true
+        default: true
 
 jobs:
-  build:
-    name: "Build"
-    uses: ./.github/workflows/build.yaml
-    permissions:
-      contents: read
-      packages: write
-    with:
-      GHCR_TAG: dev
-      GHCR_URI: "ghcr.io/${{ github.repository }}"
-      GHCR_USER: ${{ vars.GHCR_USER }}
-    secrets:
-      GHCR_PASS: ${{ secrets.GHCR_PASS }}
-
   deploy:
     name: "Deploy"
     uses: ./.github/workflows/deploy.yaml
-    needs: build
     permissions:
       contents: read
     with:
-      GHCR_TAG: dev
+      GHCR_TAG: ${{ inputs.TAG}}
       STACK_NAME: dev_django5-boiler
       STACK_FILE: docker-compose-swarm.yaml
       CONFIG_FILE: services/shane/django5-boiler/dev.env
@@ -49,8 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs: deploy
-    permissions:
-      contents: read
+    if: ${{ inputs.CLEANUP == 'true' }}
     steps:
       - name: "Purge Cache"
         uses: cssnr/cloudflare-purge-cache-action@v1
