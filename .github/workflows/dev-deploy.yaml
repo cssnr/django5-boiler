@@ -7,7 +7,7 @@ on:
         description: "Tag to Deploy"
         type: string
         required: true
-        default: "Dev"
+        default: "dev"
       CLEANUP:
         description: "Run Cleanup Steps"
         type: boolean
