@@ -1,0 +1,52 @@
+name: "Dev CI"
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - webhook
+  push:
+    branches-ignore:
+      - master
+
+jobs:
+  build:
+    name: "Build"
+    uses: ./.github/workflows/build.yaml
+    permissions:
+      contents: read
+      packages: write
+    with:
+      GHCR_TAG: dev
+      GHCR_URI: "ghcr.io/${{ github.repository }}"
+      GHCR_USER: ${{ vars.GHCR_USER }}
+    secrets:
+      GHCR_PASS: ${{ secrets.GHCR_PASS }}
+
+  deploy:
+    name: "Deploy"
+    uses: ./.github/workflows/deploy.yaml
+    needs: build
+    permissions:
+      contents: read
+    with:
+      GHCR_TAG: dev
+      STACK_NAME: dev_django5-boiler
+      STACK_FILE: docker-compose-swarm.yaml
+      CONFIG_FILE: services/shane/django5-boiler/dev.env
+    secrets:
+      SERVICE_CONFIGS_KEY: ${{ secrets.SERVICE_CONFIGS_KEY }}
+      PORTAINER_URL: ${{ secrets.PORTAINER_URL }}
+      PORTAINER_TOKEN: ${{ secrets.PORTAINER_TOKEN }}
+
+  cleanup:
+    name: "Cleanup"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: deploy
+    steps:
+      - name: "Purge Cache"
+        uses: cssnr/cloudflare-purge-cache-action@v1
+        with:
+          token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          domains: cssnr.com
