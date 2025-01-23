@@ -22,6 +22,8 @@ jobs:
       contents: read
       packages: write
     with:
+      GHCR_TAG: prod
+      GHCR_URI: "ghcr.io/${GITHUB_REPOSITORY}"
       GHCR_USER: ${{ vars.GHCR_USER }}
     secrets:
       GHCR_PASS: ${{ secrets.GHCR_PASS }}
