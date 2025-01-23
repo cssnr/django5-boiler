@@ -2,9 +2,27 @@ name: "Prod Deploy"
 
 on:
   workflow_dispatch:
-  repository_dispatch:
-    types:
-      - webhook
+    inputs:
+      TAG:
+        description: "Tag to Deploy"
+        type: string
+        required: true
+        default: "latest"
+      BUILD:
+        description: "Build Image"
+        type: string
+        required: true
+        default: "Dev"
+      DEPLOY:
+        description: "Deploy Image"
+        type: boolean
+        required: true
+        default: true
+      CLEANUP:
+        description: "Run Cleanup"
+        type: boolean
+        required: true
+        default: true
   #push:
   #  branches:
   #    - master
@@ -13,11 +31,12 @@ jobs:
   build:
     name: "Build"
     uses: ./.github/workflows/build.yaml
+    if: ${{ inputs.BUILD != '' && inputs.BUILD || 'true' }}
     permissions:
       contents: read
       packages: write
     with:
-      GHCR_TAG: latest
+      GHCR_TAG: ${{ inputs.TAG != '' && inputs.TAG || 'latest' }}
       GHCR_URI: "ghcr.io/${{ github.repository }}"
       GHCR_USER: ${{ vars.GHCR_USER }}
     secrets:
@@ -27,6 +46,7 @@ jobs:
     name: "Deploy"
     uses: ./.github/workflows/deploy.yaml
     needs: build
+    if: ${{ inputs.DEPLOY != '' && inputs.DEPLOY || 'true' }}
     permissions:
       contents: read
     with:
@@ -44,6 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs: deploy
+    if: ${{ inputs.CLEANUP != '' && inputs.CLEANUP || 'true' }}
     permissions:
       contents: read
     steps:
