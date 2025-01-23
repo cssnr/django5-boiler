@@ -64,8 +64,8 @@ jobs:
           files: docker-bake.json
           push: true
           set: |
-            *.app.tags=${{ GHCR_URI }}/app:${{ GHCR_TAG }}
-            *.nginx.tags=${{ GHCR_URI }}/nginx:${{ GHCR_TAG }}
+            *.app.tags=${{ inputs.GHCR_URI }}/app:${{ inputs.GHCR_TAG }}
+            *.nginx.tags=${{ inputs.GHCR_URI }}/nginx:${{ inputs.GHCR_TAG }}
 
       #- name: "Trigger Deploy"
       #  uses: benc-uk/workflow-dispatch@v1
