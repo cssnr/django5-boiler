@@ -64,7 +64,7 @@ jobs:
 
       - name: "Update Environment"
         run: |
-          echo "VERSION=${GHCR_TAG}" | tee -a "${{ inputs.CONFIG_PATH }}/${{ inputs.CONFIG_FILE }}"
+          echo "VERSION=${{ inputs.GHCR_TAG }}" | tee -a "${{ inputs.CONFIG_PATH }}/${{ inputs.CONFIG_FILE }}"
 
       - name: "Parse Environment"
         id: parse
