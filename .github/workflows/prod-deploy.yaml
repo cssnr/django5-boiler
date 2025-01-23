@@ -1,4 +1,4 @@
-name: "Deploy Prod"
+name: "Prod Deploy"
 
 on:
   workflow_dispatch:
@@ -6,13 +6,8 @@ on:
     types:
       - webhook
   #push:
-  #  branches-ignore:
+  #  branches:
   #    - master
-
-#env:
-#  STACK_NAME: prod_django5-boiler
-#  STACK_FILE: docker-compose-swarm.yaml
-#  CONFIG_FILE: services/shane/django5-boiler/prod.env
 
 jobs:
   build:
