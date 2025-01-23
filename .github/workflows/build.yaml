@@ -1,20 +1,20 @@
 name: "Build"
 
 on:
-  workflow_dispatch:
-  repository_dispatch:
-    types:
-      - webhook
-  release:
-    types:
-      - published
-  #push:
-  #  branches:
-  #    - master
-  #  paths:
-  #    - "app/**"
-  #    - "nginx/**"
-  #    - "docker-compose-build.yaml"
+  workflow_call:
+    inputs:
+      GHCR_TAG:
+        required: true
+        type: string
+      GHCR_URI:
+        required: true
+        type: string
+      GHCR_USER:
+        required: true
+        type: string
+    secrets:
+      GHCR_PASS:
+        required: true
 
 jobs:
   build:
@@ -50,7 +50,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: ${{ vars.GHCR_USER }}
+          username: ${{ inputs.GHCR_USER }}
           password: ${{ secrets.GHCR_PASS }}
 
       - name: "Setup Buildx"
@@ -63,8 +63,11 @@ jobs:
         with:
           files: docker-bake.json
           push: true
+          set: |
+            app.tags=${{ inputs.GHCR_URI }}-app:${{ inputs.GHCR_TAG }}
+            nginx.tags=${{ inputs.GHCR_URI }}-nginx:${{ inputs.GHCR_TAG }}
 
-      - name: "Trigger Deploy"
-        uses: benc-uk/workflow-dispatch@v1
-        with:
-          workflow: deploy.yaml
+      #- name: "Trigger Deploy"
+      #  uses: benc-uk/workflow-dispatch@v1
+      #  with:
+      #    workflow: deploy.yaml

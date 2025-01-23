@@ -1,6 +1,6 @@
 [![Test](https://img.shields.io/github/actions/workflow/status/cssnr/django5-boiler/test.yaml?logo=github&logoColor=white&label=test)](https://github.com/cssnr/django5-boiler/actions/workflows/test.yaml)
-[![Build](https://img.shields.io/github/actions/workflow/status/cssnr/django5-boiler/build.yaml?logo=github&logoColor=white&label=build)](https://github.com/cssnr/django5-boiler/actions/workflows/build.yaml)
-[![Deploy](https://img.shields.io/github/actions/workflow/status/cssnr/django5-boiler/deploy.yaml?logo=github&logoColor=white&label=deploy)](https://github.com/cssnr/django5-boiler/actions/workflows/deploy.yaml)
+[![Deploy Prod](https://img.shields.io/github/actions/workflow/status/cssnr/django5-boiler/deploy-prod.yaml?logo=github&logoColor=white&label=deploy%20prod)](https://github.com/cssnr/django5-boiler/actions/workflows/deploy-prod.yaml)
+[![Deploy Dev](https://img.shields.io/github/actions/workflow/status/cssnr/django5-boiler/deploy-dev.yaml?logo=github&logoColor=white&label=deploy%20dev)](https://github.com/cssnr/django5-boiler/actions/workflows/deploy-dev.yaml)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/django5-boiler?logo=github&logoColor=white&label=updated)](https://github.com/cssnr/django5-boiler/graphs/commit-activity)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/django5-boiler?logo=htmx&logoColor=white)](https://github.com/cssnr/django5-boiler)
 [![GitHub Org Stars](https://img.shields.io/github/stars/cssnr?style=flat&logo=github&logoColor=white)](https://cssnr.github.io/)
