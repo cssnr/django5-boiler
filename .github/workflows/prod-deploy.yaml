@@ -10,9 +10,9 @@ on:
         default: "latest"
       BUILD:
         description: "Build Image"
-        type: string
+        type: boolean
         required: true
-        default: "Dev"
+        default: true
       DEPLOY:
         description: "Deploy Image"
         type: boolean
