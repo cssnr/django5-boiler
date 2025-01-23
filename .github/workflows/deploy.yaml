@@ -3,6 +3,9 @@ name: "Deploy"
 on:
   workflow_call:
     inputs:
+      GHCR_TAG:
+        required: true
+        type: string
       STACK_NAME:
         required: true
         type: string
@@ -58,6 +61,10 @@ jobs:
           sparse-checkout: |
             ${{ inputs.CONFIG_FILE }}
           sparse-checkout-cone-mode: false
+
+      - name: "Update Environment"
+        run: |
+          echo "VERSION=${GHCR_TAG}" | tee -a "{{ inputs.CONFIG_PATH }}/${{ inputs.CONFIG_FILE }}"
 
       - name: "Parse Environment"
         id: parse

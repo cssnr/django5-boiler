@@ -22,7 +22,7 @@ jobs:
       contents: read
       packages: write
     with:
-      GHCR_TAG: prod
+      GHCR_TAG: latest
       GHCR_URI: "ghcr.io/${{ github.repository }}"
       GHCR_USER: ${{ vars.GHCR_USER }}
     secrets:
@@ -35,6 +35,7 @@ jobs:
     permissions:
       contents: read
     with:
+      GHCR_TAG: latest
       STACK_NAME: prod_django5-boiler
       STACK_FILE: docker-compose-swarm.yaml
       CONFIG_FILE: services/shane/django5-boiler/prod.env

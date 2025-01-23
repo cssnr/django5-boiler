@@ -35,6 +35,7 @@ jobs:
     permissions:
       contents: read
     with:
+      GHCR_TAG: dev
       STACK_NAME: dev_django5-boiler
       STACK_FILE: docker-compose-swarm.yaml
       CONFIG_FILE: services/shane/django5-boiler/dev.env
