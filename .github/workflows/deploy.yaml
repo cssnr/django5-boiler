@@ -7,14 +7,14 @@ on:
         required: true
         type: string
       STACK_FILE:
-        required: true
+        required: false
         type: string
         default: docker-compose-swarm.yaml
       CONFIG_FILE:
         required: true
         type: string
       CONFIG_PATH:
-        required: true
+        required: false
         type: string
         default: service-configs
     secrets:
