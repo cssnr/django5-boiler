@@ -23,7 +23,7 @@ jobs:
       packages: write
     with:
       GHCR_TAG: dev
-      GHCR_URI: "ghcr.io/${GITHUB_REPOSITORY}"
+      GHCR_URI: "ghcr.io/${{ github.repository }}"
       GHCR_USER: ${{ vars.GHCR_USER }}
     secrets:
       GHCR_PASS: ${{ secrets.GHCR_PASS }}
