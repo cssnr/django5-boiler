@@ -1,19 +1,29 @@
 name: "Deploy"
 
 on:
-  workflow_dispatch:
-  repository_dispatch:
-    types:
-      - webhook
-  #release:
-  #  types:
-  #    - published
-
-env:
-  STACK_NAME: django5-boiler
-  STACK_FILE: docker-compose-swarm.yaml
-  CONFIG_PATH: service-configs
-  CONFIG_FILE: services/shane/django5-boiler/prod.env
+  workflow_call:
+    inputs:
+      STACK_NAME:
+        required: true
+        type: string
+      STACK_FILE:
+        required: true
+        type: string
+        default: docker-compose-swarm.yaml
+      CONFIG_FILE:
+        required: true
+        type: string
+      CONFIG_PATH:
+        required: true
+        type: string
+        default: service-configs
+    secrets:
+      SERVICE_CONFIGS_KEY:
+        required: true
+      PORTAINER_URL:
+        required: true
+      PORTAINER_TOKEN:
+        required: true
 
 jobs:
   deploy:
@@ -29,14 +39,14 @@ jobs:
         uses: jacobtomlinson/gha-find-replace@v3
         with:
           find: "STACK_NAME"
-          replace: ${{ env.STACK_NAME}}
-          include: ${{ env.STACK_FILE}}
+          replace: ${{ inputs.STACK_NAME }}
+          include: ${{ inputs.STACK_FILE}}
           regex: false
 
       - name: "Debug"
         run: |
           env
-          cat ${{ env.STACK_FILE}}
+          cat ${{ inputs.STACK_FILE}}
 
       - name: "Checkout Service Configs"
         uses: actions/checkout@v4
@@ -44,29 +54,23 @@ jobs:
           repository: "hosted-domains/service-configs"
           ssh-key: ${{ secrets.SERVICE_CONFIGS_KEY }}
           ref: master
-          path: ${{ env.CONFIG_PATH }}
+          path: ${{ inputs.CONFIG_PATH }}
           sparse-checkout: |
-            ${{ env.CONFIG_FILE }}
+            ${{ inputs.CONFIG_FILE }}
           sparse-checkout-cone-mode: false
 
       - name: "Parse Environment"
         id: parse
         uses: cssnr/env-json-action@master
         with:
-          source: ${{ env.CONFIG_PATH }}/${{ env.CONFIG_FILE }}
+          source: ${{ inputs.CONFIG_PATH }}/${{ inputs.CONFIG_FILE }}
 
       - name: "Portainer Deploy"
         uses: cssnr/portainer-stack-deploy-action@v1
         with:
           url: ${{ secrets.PORTAINER_URL }}
           token: ${{ secrets.PORTAINER_TOKEN }}
-          file: ${{ env.STACK_FILE}}
-          name: ${{ env.STACK_NAME}}
+          file: ${{ inputs.STACK_FILE}}
+          name: ${{ inputs.STACK_NAME}}
           type: file
           env_json: "${{ steps.parse.outputs.result }}"
-
-      - name: "Purge Cache"
-        uses: cssnr/cloudflare-purge-cache-action@v1
-        with:
-          token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          domains: cssnr.com
