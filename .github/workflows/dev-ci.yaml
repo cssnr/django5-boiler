@@ -53,3 +53,5 @@ jobs:
     uses: ./.github/workflows/cleanup.yaml
     needs: deploy
     if: ${{ inputs.CLEANUP != '' && inputs.CLEANUP || true }}
+    secrets:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
