@@ -32,13 +32,6 @@ jobs:
 
   cleanup:
     name: "Cleanup"
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
+    uses: ./.github/workflows/deploy.yaml
     needs: deploy
-    if: ${{ inputs.CLEANUP }}
-    steps:
-      - name: "Purge Cache"
-        uses: cssnr/cloudflare-purge-cache-action@v1
-        with:
-          token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          domains: cssnr.com
+    if: ${{ inputs.CLEANUP != '' && inputs.CLEANUP || true }}
