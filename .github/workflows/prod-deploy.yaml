@@ -50,7 +50,7 @@ jobs:
     permissions:
       contents: read
     with:
-      GHCR_TAG: latest
+      GHCR_TAG: ${{ inputs.TAG != '' && inputs.TAG || 'latest' }}
       STACK_NAME: prod_django5-boiler
       STACK_FILE: docker-compose-swarm.yaml
       CONFIG_FILE: services/shane/django5-boiler/prod.env
@@ -61,15 +61,8 @@ jobs:
 
   cleanup:
     name: "Cleanup"
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
+    uses: ./.github/workflows/cleanup.yaml
     needs: deploy
     if: ${{ inputs.CLEANUP != '' && inputs.CLEANUP || true }}
-    permissions:
-      contents: read
-    steps:
-      - name: "Purge Cache"
-        uses: cssnr/cloudflare-purge-cache-action@v1
-        with:
-          token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          domains: cssnr.com
+    secrets:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

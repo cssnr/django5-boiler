@@ -12,6 +12,31 @@ My App is Good.
 
 Coming soon...
 
+# Workflows
+
+## GitHub Variables and Secrets
+
+These variables/secrets are used by various workflows...
+
+| name                 | type    | description                                                                      |
+| -------------------- | ------- | -------------------------------------------------------------------------------- |
+| GHCR_USER            | vars    | GHCR Username                                                                    |
+| GHCR_PASS            | secrets | GHCR Password/Token                                                              |
+| SERVICE_CONFIGS_KEY  | secrets | SSH Key for [service-configs](https://github.com/hosted-domains/service-configs) |
+| PORTAINER_URL        | secrets | Portainer URL                                                                    |
+| PORTAINER_TOKEN      | secrets | Portainer Token                                                                  |
+| CLOUDFLARE_API_TOKEN | secrets | **Optional** Cloudflare Token                                                    |
+
+## Workflow Variables
+
+These are convoluted because GitHub wanted to block variables to punish us.
+
+| File                                                       | Description                    |
+| ---------------------------------------------------------- | ------------------------------ |
+| [dev-ci.yaml](.github%2Fworkflows%2Fdev-ci.yaml)           | Defines variables under deploy |
+| [dev-deploy.yaml](.github%2Fworkflows%2Fdev-deploy.yaml)   | Repeated variables from above  |
+| [prod-deploy.yaml](.github%2Fworkflows%2Fprod-deploy.yaml) | Defines variables under deploy |
+
 # Development
 
 ```shell
