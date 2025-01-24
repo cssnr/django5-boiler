@@ -25,38 +25,38 @@ jobs:
         run: |
           echo "tag: ${{ inputs.TAG }}"
 
-#  build:
-#    name: "Build"
-#    uses: ./.github/workflows/build.yaml
-#    if: ${{ !contains(github.event.head_commit.message, '#noci') }}
-#    permissions:
-#      contents: read
-#      packages: write
-#    with:
-#      GHCR_TAG: ${{ inputs.TAG || 'dev' }}
-#      GHCR_URI: "ghcr.io/${{ github.repository }}"
-#      GHCR_USER: ${{ vars.GHCR_USER }}
-#    secrets:
-#      GHCR_PASS: ${{ secrets.GHCR_PASS }}
-#
-#  deploy:
-#    name: "Deploy"
-#    uses: ./.github/workflows/deploy.yaml
-#    needs: build
-#    permissions:
-#      contents: read
-#    with:
-#      GHCR_TAG: ${{ inputs.TAG || 'dev' }}
-#      STACK_NAME: dev_django5-boiler
-#      STACK_FILE: docker-compose-swarm.yaml
-#      CONFIG_FILE: services/shane/django5-boiler/dev.env
-#    secrets:
-#      SERVICE_CONFIGS_KEY: ${{ secrets.SERVICE_CONFIGS_KEY }}
-#      PORTAINER_URL: ${{ secrets.PORTAINER_URL }}
-#      PORTAINER_TOKEN: ${{ secrets.PORTAINER_TOKEN }}
-#
-#  cleanup:
-#    name: "Cleanup"
-#    uses: ./.github/workflows/deploy.yaml
-#    needs: deploy
-#    if: ${{ inputs.CLEANUP != '' && inputs.CLEANUP || true }}
+  build:
+    name: "Build"
+    uses: ./.github/workflows/build.yaml
+    if: ${{ !contains(github.event.head_commit.message, '#noci') }}
+    permissions:
+      contents: read
+      packages: write
+    with:
+      GHCR_TAG: ${{ inputs.TAG == '' && inputs.TAG || 'dev' }}
+      GHCR_URI: "ghcr.io/${{ github.repository }}"
+      GHCR_USER: ${{ vars.GHCR_USER }}
+    secrets:
+      GHCR_PASS: ${{ secrets.GHCR_PASS }}
+
+  deploy:
+    name: "Deploy"
+    uses: ./.github/workflows/deploy.yaml
+    needs: build
+    permissions:
+      contents: read
+    with:
+      GHCR_TAG: ${{ inputs.TAG == '' && inputs.TAG || 'dev' }}
+      STACK_NAME: dev_django5-boiler
+      STACK_FILE: docker-compose-swarm.yaml
+      CONFIG_FILE: services/shane/django5-boiler/dev.env
+    secrets:
+      SERVICE_CONFIGS_KEY: ${{ secrets.SERVICE_CONFIGS_KEY }}
+      PORTAINER_URL: ${{ secrets.PORTAINER_URL }}
+      PORTAINER_TOKEN: ${{ secrets.PORTAINER_TOKEN }}
+
+  cleanup:
+    name: "Cleanup"
+    uses: ./.github/workflows/deploy.yaml
+    needs: deploy
+    if: ${{ inputs.CLEANUP != '' && inputs.CLEANUP || true }}
