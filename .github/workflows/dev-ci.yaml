@@ -2,6 +2,17 @@ name: "Dev CI"
 
 on:
   workflow_dispatch:
+    inputs:
+      TAG:
+        description: "Tag to Deploy"
+        type: string
+        required: true
+        default: "dev"
+      CLEANUP:
+        description: "Run Cleanup"
+        type: boolean
+        required: true
+        default: true
   push:
     branches-ignore:
       - master
@@ -15,7 +26,7 @@ jobs:
       contents: read
       packages: write
     with:
-      GHCR_TAG: dev
+      GHCR_TAG: ${{ inputs.TAG != '' && inputs.TAG || 'dev' }}
       GHCR_URI: "ghcr.io/${{ github.repository }}"
       GHCR_USER: ${{ vars.GHCR_USER }}
     secrets:
@@ -42,6 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs: deploy
+    if: ${{ inputs.CLEANUP != '' && inputs.CLEANUP || true }}
     steps:
       - name: "Purge Cache"
         uses: cssnr/cloudflare-purge-cache-action@v1
