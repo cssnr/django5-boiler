@@ -32,6 +32,6 @@ jobs:
 
   cleanup:
     name: "Cleanup"
-    uses: ./.github/workflows/deploy.yaml
+    uses: ./.github/workflows/cleanup.yaml
     needs: deploy
     if: ${{ inputs.CLEANUP != '' && inputs.CLEANUP || true }}

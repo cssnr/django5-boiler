@@ -3,6 +3,11 @@ name: "Dev CI"
 on:
   workflow_dispatch:
     inputs:
+      TAG:
+        description: "Tag to Deploy"
+        type: string
+        required: true
+        default: "dev"
       CLEANUP:
         description: "Run Cleanup"
         type: boolean
@@ -21,7 +26,7 @@ jobs:
       contents: read
       packages: write
     with:
-      GHCR_TAG: dev
+      GHCR_TAG: ${{ inputs.TAG == '' && inputs.TAG || 'dev' }}
       GHCR_URI: "ghcr.io/${{ github.repository }}"
       GHCR_USER: ${{ vars.GHCR_USER }}
     secrets:
@@ -34,7 +39,7 @@ jobs:
     permissions:
       contents: read
     with:
-      GHCR_TAG: dev
+      GHCR_TAG: ${{ inputs.TAG == '' && inputs.TAG || 'dev' }}
       STACK_NAME: dev_django5-boiler
       STACK_FILE: docker-compose-swarm.yaml
       CONFIG_FILE: services/shane/django5-boiler/dev.env
@@ -45,6 +50,6 @@ jobs:
 
   cleanup:
     name: "Cleanup"
-    uses: ./.github/workflows/deploy.yaml
+    uses: ./.github/workflows/cleanup.yaml
     needs: deploy
     if: ${{ inputs.CLEANUP != '' && inputs.CLEANUP || true }}
