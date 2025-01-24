@@ -23,6 +23,9 @@ on:
         type: boolean
         required: true
         default: true
+  repository_dispatch:
+    types:
+      - webhook
   #push:
   #  branches:
   #    - master
