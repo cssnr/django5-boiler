@@ -40,7 +40,7 @@ jobs:
       contents: read
     with:
       GHCR_TAG: ${{ inputs.TAG == '' && inputs.TAG || 'dev' }}
-      STACK_NAME: dev_django5-boiler
+      STACK_NAME: dev_cssnr-django5-boiler
       STACK_FILE: docker-compose-swarm.yaml
       CONFIG_FILE: services/shane/django5-boiler/dev.env
     secrets:
