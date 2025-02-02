@@ -118,8 +118,7 @@ services:
 
   worker:
     image: ghcr.io/cssnr/django5-boiler-app:${VERSION:?err}
-    environment:
-      <<: *environment
+    environment: *environment
     command: "celery -A project worker -l INFO -c 2"
     deploy:
       replicas: 1
@@ -136,8 +135,7 @@ services:
 
   beat:
     image: ghcr.io/cssnr/django5-boiler-app:${VERSION:?err}
-    environment:
-      <<: *environment
+    environment: *environment
     command: "celery -A project beat -l INFO -S django"
     deploy:
       replicas: 1
@@ -176,8 +174,7 @@ services:
 
   flower:
     image: mher/flower:1.2
-    environment:
-      <<: *environment
+    environment: *environment
     command: "celery flower --enable_events=False --url_prefix=flower"
     deploy:
       replicas: 1
