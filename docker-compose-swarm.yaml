@@ -1,60 +1,10 @@
 version: "3.8"
 
-x-common-env-vars: &common-env-vars
-  DJANGO_SUPERUSER_USERNAME: ${DJANGO_SUPERUSER_USERNAME}
-  DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD}
-  DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL}
-  APP_LOG_LEVEL: ${APP_LOG_LEVEL}
-  DJANGO_LOG_LEVEL: ${DJANGO_LOG_LEVEL}
-  DEBUG: ${DEBUG}
-  ALLOWED_HOSTS: ${ALLOWED_HOSTS}
-  CSRF_ORIGINS: ${CSRF_ORIGINS}
-  SESSION_COOKIE_AGE: ${SESSION_COOKIE_AGE}
-  SECRET_KEY: ${SECRET_KEY}
-  STATIC_ROOT: ${STATIC_ROOT}
-  MEDIA_ROOT: ${MEDIA_ROOT}
-  USE_TZ: ${USE_TZ}
-  LANGUAGE_CODE: ${LANGUAGE_CODE}
-  TZ: ${TZ}
-  DATABASE_TYPE: ${DATABASE_TYPE}
-  DATABASE_NAME: ${DATABASE_NAME}
-  DATABASE_USER: ${DATABASE_USER}
-  DATABASE_PASS: ${DATABASE_PASS}
-  DATABASE_HOST: ${DATABASE_HOST}
-  DATABASE_PORT: ${DATABASE_PORT}
-  SENTRY_URL: ${SENTRY_URL}
-  SENTRY_SAMPLE_RATE: ${SENTRY_SAMPLE_RATE}
-  SENTRY_DEBUG: ${SENTRY_DEBUG}
-  SENTRY_ENVIRONMENT: ${SENTRY_ENVIRONMENT}
-  USE_X_FORWARDED_HOST: ${USE_X_FORWARDED_HOST}
-  SECURE_REFERRER_POLICY: ${SECURE_REFERRER_POLICY}
-  REDIS_IGNORE_EXCEPTIONS: ${REDIS_IGNORE_EXCEPTIONS}
-  CACHE_BACKEND: ${CACHE_BACKEND}
-  CACHE_LOCATION: ${CACHE_LOCATION}
-  CELERY_BROKER_URL: ${CELERY_BROKER_URL}
-  CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
-  EMAIL_FROM_USER: ${EMAIL_FROM_USER}
-  EMAIL_HOST_USER: ${EMAIL_HOST_USER}
-  EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
-  EMAIL_HOST: ${EMAIL_HOST}
-  EMAIL_USE_TLS: ${EMAIL_USE_TLS}
-  EMAIL_PORT: ${EMAIL_PORT}
-  GOOGLE_SITE_PUBLIC: ${GOOGLE_SITE_PUBLIC}
-  GOOGLE_SITE_SECRET: ${GOOGLE_SITE_SECRET}
-  OAUTH_CLIENT_ID: ${OAUTH_CLIENT_ID}
-  OAUTH_CLIENT_SECRET: ${OAUTH_CLIENT_SECRET}
-  OAUTH_REDIRECT_URL: ${OAUTH_REDIRECT_URL}
-  SITE_URL: ${SITE_URL}
-  SUPER_USERS: ${SUPER_USERS}
-  DISCORD_WEBHOOK: ${DISCORD_WEBHOOK}
-  DISCORD_INVITE: ${DISCORD_INVITE}
-  CONTACT_FORM_TO_EMAIL: ${CONTACT_FORM_TO_EMAIL}
-
 services:
   nginx:
     build:
       context: nginx
-    image: ghcr.io/cssnr/django5-boiler-nginx:${VERSION:-latest}
+    image: ghcr.io/cssnr/django5-boiler-nginx:${VERSION:?err}
     deploy:
       mode: global
       resources:
@@ -96,10 +46,56 @@ services:
   app:
     build:
       context: app
-    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:-latest}
-    #env_file: stack.env
-    environment:
-      <<: *common-env-vars
+    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:?err}
+    environment: &environment
+      DJANGO_SUPERUSER_USERNAME: ${DJANGO_SUPERUSER_USERNAME}
+      DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD}
+      DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL}
+      APP_LOG_LEVEL: ${APP_LOG_LEVEL}
+      DJANGO_LOG_LEVEL: ${DJANGO_LOG_LEVEL}
+      DEBUG: ${DEBUG}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+      CSRF_ORIGINS: ${CSRF_ORIGINS}
+      SESSION_COOKIE_AGE: ${SESSION_COOKIE_AGE}
+      SECRET_KEY: ${SECRET_KEY}
+      STATIC_ROOT: ${STATIC_ROOT}
+      MEDIA_ROOT: ${MEDIA_ROOT}
+      USE_TZ: ${USE_TZ}
+      LANGUAGE_CODE: ${LANGUAGE_CODE}
+      TZ: ${TZ}
+      DATABASE_TYPE: ${DATABASE_TYPE}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASS: ${DATABASE_PASS}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      SENTRY_URL: ${SENTRY_URL}
+      SENTRY_SAMPLE_RATE: ${SENTRY_SAMPLE_RATE}
+      SENTRY_DEBUG: ${SENTRY_DEBUG}
+      SENTRY_ENVIRONMENT: ${SENTRY_ENVIRONMENT}
+      USE_X_FORWARDED_HOST: ${USE_X_FORWARDED_HOST}
+      SECURE_REFERRER_POLICY: ${SECURE_REFERRER_POLICY}
+      REDIS_IGNORE_EXCEPTIONS: ${REDIS_IGNORE_EXCEPTIONS}
+      CACHE_BACKEND: ${CACHE_BACKEND}
+      CACHE_LOCATION: ${CACHE_LOCATION}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
+      EMAIL_FROM_USER: ${EMAIL_FROM_USER}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_USE_TLS: ${EMAIL_USE_TLS}
+      EMAIL_PORT: ${EMAIL_PORT}
+      GOOGLE_SITE_PUBLIC: ${GOOGLE_SITE_PUBLIC}
+      GOOGLE_SITE_SECRET: ${GOOGLE_SITE_SECRET}
+      OAUTH_CLIENT_ID: ${OAUTH_CLIENT_ID}
+      OAUTH_CLIENT_SECRET: ${OAUTH_CLIENT_SECRET}
+      OAUTH_REDIRECT_URL: ${OAUTH_REDIRECT_URL}
+      SITE_URL: ${SITE_URL}
+      SUPER_USERS: ${SUPER_USERS}
+      DISCORD_WEBHOOK: ${DISCORD_WEBHOOK}
+      DISCORD_INVITE: ${DISCORD_INVITE}
+      CONTACT_FORM_TO_EMAIL: ${CONTACT_FORM_TO_EMAIL}
     command: "gunicorn project.asgi:application -b 0.0.0.0:9000 -w 2 -k uvicorn.workers.UvicornWorker"
     healthcheck:
       test: ["CMD", "curl", "-sf", "http://localhost:9000/app-health-check/"]
@@ -121,10 +117,8 @@ services:
       - internal
 
   worker:
-    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:-latest}
-    #env_file: stack.env
-    environment:
-      <<: *common-env-vars
+    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:?err}
+    environment: *environment
     command: "celery -A project worker -l INFO -c 2"
     deploy:
       replicas: 1
@@ -140,10 +134,8 @@ services:
       - internal
 
   beat:
-    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:-latest}
-    #env_file: stack.env
-    environment:
-      <<: *common-env-vars
+    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:?err}
+    environment: *environment
     command: "celery -A project beat -l INFO -S django"
     deploy:
       replicas: 1
@@ -182,9 +174,7 @@ services:
 
   flower:
     image: mher/flower:1.2
-    #env_file: stack.env
-    environment:
-      <<: *common-env-vars
+    environment: *environment
     command: "celery flower --enable_events=False --url_prefix=flower"
     deploy:
       replicas: 1
