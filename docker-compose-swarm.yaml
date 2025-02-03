@@ -2,8 +2,7 @@ version: "3.8"
 
 services:
   nginx:
-    build:
-      context: nginx
+    build: nginx
     image: ghcr.io/cssnr/django5-boiler-nginx:${VERSION:?err}
     deploy:
       mode: global
@@ -15,14 +14,14 @@ services:
         - "traefik.enable=true"
         - "traefik.docker.network=traefik-public"
         - "traefik.constraint-label=traefik-public"
-        - "traefik.http.routers.STACK_NAME-http.rule=Host(`${TRAEFIK_HOST:?err}`)"
-        - "traefik.http.routers.STACK_NAME-http.entrypoints=http"
-        - "traefik.http.routers.STACK_NAME-http.middlewares=https-redirect"
-        - "traefik.http.routers.STACK_NAME-https.rule=Host(`${TRAEFIK_HOST:?err}`)"
-        - "traefik.http.routers.STACK_NAME-https.entrypoints=https"
-        - "traefik.http.routers.STACK_NAME-https.tls=true"
-        - "traefik.http.services.STACK_NAME.loadbalancer.server.port=80"
-        - "traefik.http.services.STACK_NAME.loadbalancer.server.scheme=http"
+        - "traefik.http.routers.${STACK_NAME:?err}-http.rule=Host(`${TRAEFIK_HOST:?err}`)"
+        - "traefik.http.routers.${STACK_NAME:?err}-http.entrypoints=http"
+        - "traefik.http.routers.${STACK_NAME:?err}-http.middlewares=https-redirect"
+        - "traefik.http.routers.${STACK_NAME:?err}-https.rule=Host(`${TRAEFIK_HOST:?err}`)"
+        - "traefik.http.routers.${STACK_NAME:?err}-https.entrypoints=https"
+        - "traefik.http.routers.${STACK_NAME:?err}-https.tls=true"
+        - "traefik.http.services.${STACK_NAME:?err}.loadbalancer.server.port=80"
+        - "traefik.http.services.${STACK_NAME:?err}.loadbalancer.server.scheme=http"
     #healthcheck:
     #  test: ["CMD-SHELL", "curl -sf localhost:80/health-check || exit 1"]
     #  interval: 10s
@@ -44,8 +43,7 @@ services:
       - internal
 
   app:
-    build:
-      context: app
+    build: app
     image: ghcr.io/cssnr/django5-boiler-app:${VERSION:?err}
     environment: &environment
       DJANGO_SUPERUSER_USERNAME: ${DJANGO_SUPERUSER_USERNAME}
@@ -213,9 +211,9 @@ secrets:
 
 volumes:
   data_dir:
+    #driver_opts:
+    #  type: none
+    #  o: bind
+    #  device: /data/docker/${STACK_NAME:?err}
   flower_data:
   redis_data:
-#    driver_opts:
-#      type: none
-#      o: bind
-#      device: /data/docker/STACK_NAME
