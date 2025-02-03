@@ -2,7 +2,7 @@ name: "Test"
 
 on:
   workflow_dispatch:
-  #push:
+  push:
 
 jobs:
   test:
@@ -12,6 +12,21 @@ jobs:
     if: ${{ !contains(github.event.head_commit.message, '#notest') }}
 
     services:
+      mariadb:
+        image: mariadb
+        ports:
+          - 3306:3306
+        env:
+          MARIADB_DATABASE: dj5boiler
+          MARIADB_USER: dj5boiler
+          MARIADB_PASSWORD: password
+          MARIADB_RANDOM_ROOT_PASSWORD: 1
+        options: >-
+          --health-cmd "mariadb-admin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
       redis:
         image: redis
         ports:
@@ -27,7 +42,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: "Setup Python"
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
@@ -36,14 +51,15 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
+          python -m pip install coverage flake8
 
-      - name: "Flake8"
+      - name: "Run Flake8"
         working-directory: app
         run: |
           flake8
 
       - name: "Setup Node 20"
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
 
@@ -54,12 +70,18 @@ jobs:
       - name: "Test Migrations"
         working-directory: app
         run: |
+          set -a
+          source ../test.env
+          echo "DATABASE_HOST: ${DATABASE_HOST}"
+          echo "DATABASE_PORT: ${DATABASE_PORT}"
+          #python manage.py makemigrations --dry-run --check --noinput
           python manage.py migrate
-          python manage.py makemigrations --dry-run --check --noinput
 
-      - name: "Test"
+      - name: "Test App"
         working-directory: app
         run: |
+          set -a
+          source ../test.env
           coverage run manage.py test --verbosity 2 --keepdb
           coverage xml
           coverage report

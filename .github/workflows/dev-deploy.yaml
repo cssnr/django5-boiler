@@ -3,7 +3,7 @@ name: "Dev Deploy"
 on:
   workflow_dispatch:
     inputs:
-      TAG:
+      VERSION:
         description: "Tag to Deploy"
         type: string
         required: true
@@ -21,7 +21,7 @@ jobs:
     permissions:
       contents: read
     with:
-      VERSION: ${{ inputs.TAG }}
+      VERSION: ${{ inputs.VERSION }}
       STACK_NAME: dev_cssnr-django5-boiler
       STACK_FILE: docker-compose-swarm.yaml
       CONFIG_FILE: services/shane/django5-boiler/dev.env
