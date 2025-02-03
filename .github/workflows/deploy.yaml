@@ -61,6 +61,7 @@ jobs:
       - name: "Update Environment"
         run: |
           echo "VERSION=${{ inputs.VERSION }}" | tee -a "service-configs/${{ inputs.CONFIG_FILE }}"
+          echo "STACK_NAME=${{ inputs.STACK_NAME }}" | tee -a "service-configs/${{ inputs.CONFIG_FILE }}"
 
       - name: "Parse Environment"
         id: parse
