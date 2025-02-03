@@ -3,7 +3,7 @@ name: "Deploy"
 on:
   workflow_call:
     inputs:
-      GHCR_TAG:
+      VERSION:
         required: true
         type: string
       STACK_NAME:
@@ -16,10 +16,6 @@ on:
       CONFIG_FILE:
         required: true
         type: string
-      CONFIG_PATH:
-        required: false
-        type: string
-        default: service-configs
     secrets:
       SERVICE_CONFIGS_KEY:
         required: true
@@ -38,14 +34,6 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: "Find and Replace"
-        uses: jacobtomlinson/gha-find-replace@v3
-        with:
-          find: "STACK_NAME"
-          replace: ${{ inputs.STACK_NAME }}
-          include: ${{ inputs.STACK_FILE}}
-          regex: false
-
       - name: "Debug"
         run: |
           env
@@ -57,20 +45,21 @@ jobs:
           repository: "hosted-domains/service-configs"
           ssh-key: ${{ secrets.SERVICE_CONFIGS_KEY }}
           ref: master
-          path: ${{ inputs.CONFIG_PATH }}
+          path: service-configs
           sparse-checkout: |
             ${{ inputs.CONFIG_FILE }}
           sparse-checkout-cone-mode: false
 
       - name: "Update Environment"
         run: |
-          echo "VERSION=${{ inputs.GHCR_TAG }}" | tee -a "${{ inputs.CONFIG_PATH }}/${{ inputs.CONFIG_FILE }}"
+          echo "VERSION=${{ inputs.VERSION }}" | tee -a "service-configs/${{ inputs.CONFIG_FILE }}"
+          echo "STACK_NAME=${{ inputs.STACK_NAME }}" | tee -a "service-configs/${{ inputs.CONFIG_FILE }}"
 
       - name: "Parse Environment"
         id: parse
         uses: cssnr/env-json-action@master
         with:
-          source: ${{ inputs.CONFIG_PATH }}/${{ inputs.CONFIG_FILE }}
+          source: service-configs/${{ inputs.CONFIG_FILE }}
 
       - name: "Portainer Deploy"
         uses: cssnr/portainer-stack-deploy-action@v1
