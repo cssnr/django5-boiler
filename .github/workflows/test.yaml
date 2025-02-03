@@ -68,21 +68,27 @@ jobs:
         run: |
           npm install
 
-      - name: "Setup Config"
-        run: |
-          cp settings.env.example settings.env
-          set -a
-          source settings.env
+      #- name: "Setup Config"
+      #  run: |
+      #    cp settings.env.example settings.env
+      #    set -a
+      #    source settings.env
 
       - name: "Test Migrations"
         working-directory: app
+        #env:
+        #  SECRET_KEY: alsdfjalksdjfllkjdfkerioqweroiu
         run: |
+          set -a
+          source settings.env.example
           python manage.py migrate
           python manage.py makemigrations --dry-run --check --noinput
 
       - name: "Test"
         working-directory: app
         run: |
+          set -a
+          source settings.env.example
           coverage run manage.py test --verbosity 2 --keepdb
           coverage xml
           coverage report
