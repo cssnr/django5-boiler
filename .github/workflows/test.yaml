@@ -80,7 +80,7 @@ jobs:
         #  SECRET_KEY: alsdfjalksdjfllkjdfkerioqweroiu
         run: |
           set -a
-          source settings.env.example
+          source ../settings.env.example
           python manage.py migrate
           python manage.py makemigrations --dry-run --check --noinput
 
@@ -88,7 +88,7 @@ jobs:
         working-directory: app
         run: |
           set -a
-          source settings.env.example
+          source ../settings.env.example
           coverage run manage.py test --verbosity 2 --keepdb
           coverage xml
           coverage report
