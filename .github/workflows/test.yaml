@@ -12,6 +12,22 @@ jobs:
     if: ${{ !contains(github.event.head_commit.message, '#notest') }}
 
     services:
+      mysql:
+        image: mariadb
+        ports:
+          - 33306:3306
+        env:
+          MARIADB_DATABASE: dj5boiler
+          MARIADB_USER: dj5boiler
+          MARIADB_PASSWORD: TPszr4mPChld5PvMIkO40LXJ
+          #MARIADB_ROOT_PASSWORD: rootpassword
+          MARIADB_RANDOM_ROOT_PASSWORD: 1
+        options: >-
+          --health-cmd "mariadb-admin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
       redis:
         image: redis
         ports:
@@ -51,6 +67,12 @@ jobs:
       - name: "Install Dependencies"
         run: |
           npm install
+
+      - name: "Setup Config"
+        run: |
+          cp settings.env.example settings.env
+          set -a
+          source settings.env
 
       - name: "Test Migrations"
         working-directory: app
