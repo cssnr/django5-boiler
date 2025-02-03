@@ -12,10 +12,10 @@ jobs:
     if: ${{ !contains(github.event.head_commit.message, '#notest') }}
 
     services:
-      mysql:
+      mariadb:
         image: mariadb
         ports:
-          - 33306:3306
+          - 3306:3306
         env:
           MARIADB_DATABASE: dj5boiler
           MARIADB_USER: dj5boiler
@@ -80,7 +80,7 @@ jobs:
         #  SECRET_KEY: alsdfjalksdjfllkjdfkerioqweroiu
         run: |
           set -a
-          source ../settings.env.example
+          source ../test.env
           echo "DATABASE_HOST: ${DATABASE_HOST}"
           echo "DATABASE_PORT: ${DATABASE_PORT}"
           #python manage.py makemigrations --dry-run --check --noinput
@@ -90,7 +90,7 @@ jobs:
         working-directory: app
         run: |
           set -a
-          source ../settings.env.example
+          source ../test.env
           coverage run manage.py test --verbosity 2 --keepdb
           coverage xml
           coverage report
