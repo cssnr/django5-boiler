@@ -72,8 +72,6 @@ jobs:
         run: |
           set -a
           source ../test.env
-          echo "DATABASE_HOST: ${DATABASE_HOST}"
-          echo "DATABASE_PORT: ${DATABASE_PORT}"
           #python manage.py makemigrations --dry-run --check --noinput
           python manage.py migrate
 
