@@ -19,8 +19,7 @@ jobs:
         env:
           MARIADB_DATABASE: dj5boiler
           MARIADB_USER: dj5boiler
-          MARIADB_PASSWORD: TPszr4mPChld5PvMIkO40LXJ
-          #MARIADB_ROOT_PASSWORD: rootpassword
+          MARIADB_PASSWORD: password
           MARIADB_RANDOM_ROOT_PASSWORD: 1
         options: >-
           --health-cmd "mariadb-admin ping"
@@ -54,7 +53,7 @@ jobs:
           python -m pip install -r requirements.txt
           python -m pip install coverage flake8
 
-      - name: "Flake8"
+      - name: "Run Flake8"
         working-directory: app
         run: |
           flake8
@@ -68,16 +67,8 @@ jobs:
         run: |
           npm install
 
-      #- name: "Setup Config"
-      #  run: |
-      #    cp settings.env.example settings.env
-      #    set -a
-      #    source settings.env
-
       - name: "Test Migrations"
         working-directory: app
-        #env:
-        #  SECRET_KEY: alsdfjalksdjfllkjdfkerioqweroiu
         run: |
           set -a
           source ../test.env
@@ -86,7 +77,7 @@ jobs:
           #python manage.py makemigrations --dry-run --check --noinput
           python manage.py migrate
 
-      - name: "Test"
+      - name: "Test App"
         working-directory: app
         run: |
           set -a
