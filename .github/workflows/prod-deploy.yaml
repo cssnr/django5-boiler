@@ -3,7 +3,7 @@ name: "Prod Deploy"
 on:
   workflow_dispatch:
     inputs:
-      TAG:
+      VERSION:
         description: "Tag to Deploy"
         type: string
         required: true
@@ -39,7 +39,7 @@ jobs:
       contents: read
       packages: write
     with:
-      VERSION: ${{ inputs.TAG != '' && inputs.TAG || 'latest' }}
+      VERSION: ${{ inputs.VERSION != '' && inputs.VERSION || 'latest' }}
       GHCR_URI: "ghcr.io/${{ github.repository }}"
       GHCR_USER: ${{ vars.GHCR_USER }}
     secrets:
@@ -53,7 +53,7 @@ jobs:
     permissions:
       contents: read
     with:
-      VERSION: ${{ inputs.TAG != '' && inputs.TAG || 'latest' }}
+      VERSION: ${{ inputs.VERSION != '' && inputs.VERSION || 'latest' }}
       STACK_NAME: prod_cssnr-django5-boiler
       STACK_FILE: docker-compose-swarm.yaml
       CONFIG_FILE: services/shane/django5-boiler/prod.env

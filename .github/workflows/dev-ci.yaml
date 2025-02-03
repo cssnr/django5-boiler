@@ -3,7 +3,7 @@ name: "Dev CI"
 on:
   workflow_dispatch:
     inputs:
-      TAG:
+      VERSION:
         description: "Tag to Deploy"
         type: string
         required: true
@@ -26,7 +26,7 @@ jobs:
       contents: read
       packages: write
     with:
-      VERSION: ${{ inputs.TAG == '' && inputs.TAG || 'dev' }}
+      VERSION: ${{ inputs.VERSION == '' && inputs.VERSION || 'dev' }}
       GHCR_URI: "ghcr.io/${{ github.repository }}"
       GHCR_USER: ${{ vars.GHCR_USER }}
     secrets:
@@ -39,7 +39,7 @@ jobs:
     permissions:
       contents: read
     with:
-      VERSION: ${{ inputs.TAG == '' && inputs.TAG || 'dev' }}
+      VERSION: ${{ inputs.VERSION == '' && inputs.VERSION || 'dev' }}
       STACK_NAME: dev_cssnr-django5-boiler
       STACK_FILE: docker-compose-swarm.yaml
       CONFIG_FILE: services/shane/django5-boiler/dev.env
