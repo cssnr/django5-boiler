@@ -67,12 +67,12 @@ jobs:
           sed -i "0,/v1/s//v${GITHUB_RUN_NUMBER}/" ${SERVICE_WORKER}
           head ${SERVICE_WORKER} -n 4
 
-      - name: "Debug"
-        run: |
-          pwd
-          ls
-          ls -lAh app/static
-          head app/static/js/sw.js -n 4
+      #- name: "Debug"
+      #  run: |
+      #    pwd
+      #    ls
+      #    ls -lAh app/static
+      #    head app/static/js/sw.js -n 4
 
       - name: "Docker Login"
         uses: docker/login-action@v3
