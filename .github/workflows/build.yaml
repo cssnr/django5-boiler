@@ -52,7 +52,8 @@ jobs:
       - name: "Node Cache Hit"
         if: ${{ steps.npm-cache.outputs.cache-hit }}
         run: |
-          echo "Yes: '${{ steps.npm-cache.outputs.cache-hit }}'"
+          echo "dir: '${{ steps.npm-cache-dir.outputs.dir }}'"
+          echo "cache-hit: '${{ steps.npm-cache.outputs.cache-hit }}'"
 
       - name: "Install Node"
         run: |
