@@ -34,15 +34,35 @@ jobs:
         with:
           node-version: 20
 
-      - name: "Install Dependencies"
+      - name: "Set Cache Directory"
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
+      - name: "Node Cache"
+        uses: actions/cache@v4
+        id: npm-cache
+        # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: "Node Cache Hit"
+        if: ${{ steps.npm-cache.outputs.cache-hit }}
+        run: |
+          echo "Yes: '${{ steps.npm-cache.outputs.cache-hit }}'"
+
+      - name: "Install Node"
         run: |
           npm install
 
-      - name: "Update Cache Version"
+      - name: "Update SW Cache Version"
         env:
           SERVICE_WORKER: app/static/js/sw.js
         run: |
-          echo "Updating Cache to Version: v${GITHUB_RUN_NUMBER}"
+          echo "Updating SW Cache to: v${GITHUB_RUN_NUMBER}"
           sed -i "0,/v1/s//v${GITHUB_RUN_NUMBER}/" ${SERVICE_WORKER}
           head ${SERVICE_WORKER} -n 4
 
