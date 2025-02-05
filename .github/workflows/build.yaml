@@ -90,7 +90,7 @@ jobs:
         uses: docker/bake-action@v6
         with:
           source: "."
-          files: docker-compose-swarm.yaml
+          files: docker-compose.yaml
           push: true
           set: |
             app.tags=${{ inputs.GHCR_URI }}-app:${{ inputs.VERSION }}
