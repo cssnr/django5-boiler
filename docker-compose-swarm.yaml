@@ -3,7 +3,7 @@ version: "3.8"
 services:
   nginx:
     build: nginx
-    image: ghcr.io/cssnr/django5-boiler-nginx:${VERSION:?err}
+    image: ghcr.io/cssnr/django5-boiler-nginx:${VERSION:-latest}
     deploy:
       mode: global
       resources:
@@ -44,7 +44,7 @@ services:
 
   app:
     build: app
-    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:?err}
+    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:-latest}
     environment: &environment
       DJANGO_SUPERUSER_USERNAME: ${DJANGO_SUPERUSER_USERNAME}
       DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD}
@@ -115,7 +115,7 @@ services:
       - internal
 
   worker:
-    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:?err}
+    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:-latest}
     environment: *environment
     command: "celery -A project worker -l INFO -c 2"
     deploy:
@@ -132,7 +132,7 @@ services:
       - internal
 
   beat:
-    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:?err}
+    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:-latest}
     environment: *environment
     command: "celery -A project beat -l INFO -S django"
     deploy:
