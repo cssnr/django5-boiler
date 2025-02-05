@@ -89,9 +89,9 @@ jobs:
       - name: "Bake and Push"
         uses: docker/bake-action@v6
         env:
-          VERSION: ""
-          STACK_NAME: ""
-          TRAEFIK_HOST: ""
+          VERSION: "required-for-variable-interpolation"
+          STACK_NAME: "required-for-variable-interpolation"
+          TRAEFIK_HOST: "required-for-variable-interpolation"
         with:
           source: "."
           files: docker-compose-swarm.yaml
