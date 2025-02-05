@@ -3,7 +3,7 @@ version: "3.8"
 services:
   nginx:
     build: nginx
-    image: ghcr.io/cssnr/django5-boiler-nginx:${VERSION:?err}
+    image: ghcr.io/cssnr/django5-boiler-nginx:${VERSION:-latest}
     deploy:
       mode: global
       resources:
@@ -14,10 +14,10 @@ services:
         - "traefik.enable=true"
         - "traefik.docker.network=traefik-public"
         - "traefik.constraint-label=traefik-public"
-        - "traefik.http.routers.${STACK_NAME:?err}-http.rule=Host(`${TRAEFIK_HOST:?err}`)"
+        - "traefik.http.routers.${STACK_NAME:?err}-http.rule=Host(`${TRAEFIK_HOST}`)"
         - "traefik.http.routers.${STACK_NAME:?err}-http.entrypoints=http"
         - "traefik.http.routers.${STACK_NAME:?err}-http.middlewares=https-redirect"
-        - "traefik.http.routers.${STACK_NAME:?err}-https.rule=Host(`${TRAEFIK_HOST:?err}`)"
+        - "traefik.http.routers.${STACK_NAME:?err}-https.rule=Host(`${TRAEFIK_HOST}`)"
         - "traefik.http.routers.${STACK_NAME:?err}-https.entrypoints=https"
         - "traefik.http.routers.${STACK_NAME:?err}-https.tls=true"
         - "traefik.http.services.${STACK_NAME:?err}.loadbalancer.server.port=80"
@@ -44,7 +44,7 @@ services:
 
   app:
     build: app
-    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:?err}
+    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:-latest}
     environment: &environment
       DJANGO_SUPERUSER_USERNAME: ${DJANGO_SUPERUSER_USERNAME}
       DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD}
@@ -115,7 +115,7 @@ services:
       - internal
 
   worker:
-    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:?err}
+    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:-latest}
     environment: *environment
     command: "celery -A project worker -l INFO -c 2"
     deploy:
@@ -132,7 +132,7 @@ services:
       - internal
 
   beat:
-    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:?err}
+    image: ghcr.io/cssnr/django5-boiler-app:${VERSION:-latest}
     environment: *environment
     command: "celery -A project beat -l INFO -S django"
     deploy:
