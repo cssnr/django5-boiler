@@ -42,7 +42,6 @@ jobs:
       - name: "Node Cache"
         uses: actions/cache@v4
         id: npm-cache
-        # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
         with:
           path: ${{ steps.npm-cache-dir.outputs.dir }}
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -88,10 +87,8 @@ jobs:
 
       - name: "Bake and Push"
         uses: docker/bake-action@v6
-        env:
-          STACK_NAME: "do-not-set-this-env-variable"
         with:
-          source: "."
+          source: .
           files: docker-compose-swarm.yaml
           push: true
           targets: app,nginx
@@ -99,11 +96,5 @@ jobs:
             app.tags=${{ inputs.GHCR_URI }}-app:${{ inputs.VERSION }}
             nginx.tags=${{ inputs.GHCR_URI }}-nginx:${{ inputs.VERSION }}
             *.platform=linux/amd64,linux/arm64
-            *.output=type=image,push=true
             *.cache-from=type=gha
             *.cache-to=type=gha,mode=max
-
-      #- name: "Trigger Deploy"
-      #  uses: benc-uk/workflow-dispatch@v1
-      #  with:
-      #    workflow: deploy.yaml
