@@ -27,7 +27,6 @@ jobs:
       packages: write
     with:
       VERSION: ${{ inputs.VERSION == '' && inputs.VERSION || 'dev' }}
-      GHCR_URI: "ghcr.io/${{ github.repository }}"
       GHCR_USER: ${{ vars.GHCR_USER }}
     secrets:
       GHCR_PASS: ${{ secrets.GHCR_PASS }}
