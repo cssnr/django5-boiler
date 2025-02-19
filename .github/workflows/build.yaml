@@ -30,7 +30,23 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: "Setup Node"
+      - name: "Docker Tags"
+        id: dtags
+        uses: cssnr/docker-tags-action@v1
+        with:
+          tags: ${{ inputs.VERSION }}
+          images: |
+            "ghcr.io/${{ github.repository }}-app"
+            "ghcr.io/${{ github.repository }}-nginx"
+
+      - name: "Debug Docker Tags"
+        run: |
+          echo inputs.VERSION: '${{ inputs.VERSION }}'
+          echo github.ref_name: '${{ github.ref_name }}'
+          echo -e "tags:\n${{ steps.dtags.outputs.tags }}"
+          echo -e "labels:\n${{ steps.dtags.outputs.labels }}"
+
+      - name: "Setup Node 20"
         uses: actions/setup-node@v4
         with:
           node-version: 20
