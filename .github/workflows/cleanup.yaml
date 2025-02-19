@@ -13,7 +13,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: "Purge Cache"
-        uses: cssnr/cloudflare-purge-cache-action@v1
+        uses: cssnr/cloudflare-purge-cache-action@v2
         with:
           token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           domains: cssnr.com
