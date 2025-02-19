@@ -34,8 +34,6 @@ jobs:
     name: "Deploy"
     uses: ./.github/workflows/deploy.yaml
     needs: build
-    permissions:
-      contents: read
     with:
       VERSION: ${{ inputs.VERSION != '' && inputs.VERSION || 'dev' }}
       STACK_NAME: dev_cssnr-django5-boiler
