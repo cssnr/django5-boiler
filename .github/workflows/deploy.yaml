@@ -29,6 +29,8 @@ jobs:
     name: "Deploy"
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      contents: read
 
     steps:
       - name: "Checkout"
@@ -57,7 +59,7 @@ jobs:
 
       - name: "Parse Environment"
         id: parse
-        uses: cssnr/env-json-action@master
+        uses: cssnr/env-json-action@v1
         with:
           source: service-configs/${{ inputs.CONFIG_FILE }}
           sensitive: true

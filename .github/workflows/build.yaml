@@ -9,6 +9,10 @@ on:
       GHCR_USER:
         required: true
         type: string
+      STACK_FILE:
+        required: false
+        type: string
+        default: docker-compose-swarm.yaml
     secrets:
       GHCR_PASS:
         required: true
@@ -26,7 +30,7 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: "Setup Node"
+      - name: "Setup Node 20"
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -85,7 +89,7 @@ jobs:
       - name: "Bake and Push"
         uses: docker/bake-action@v6
         with:
-          files: docker-compose-swarm.yaml
+          files: ${{ inputs.STACK_FILE }}
           source: .
           push: true
           targets: app,nginx

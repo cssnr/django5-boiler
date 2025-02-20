@@ -26,8 +26,9 @@ jobs:
       contents: read
       packages: write
     with:
-      VERSION: ${{ inputs.VERSION == '' && inputs.VERSION || 'dev' }}
+      VERSION: ${{ inputs.VERSION != '' && inputs.VERSION || 'dev' }}
       GHCR_USER: ${{ vars.GHCR_USER }}
+      STACK_FILE: docker-compose-swarm.yaml
     secrets:
       GHCR_PASS: ${{ secrets.GHCR_PASS }}
 
@@ -38,7 +39,7 @@ jobs:
     permissions:
       contents: read
     with:
-      VERSION: ${{ inputs.VERSION == '' && inputs.VERSION || 'dev' }}
+      VERSION: ${{ inputs.VERSION != '' && inputs.VERSION || 'dev' }}
       STACK_NAME: dev_cssnr-django5-boiler
       STACK_FILE: docker-compose-swarm.yaml
       CONFIG_FILE: services/shane/django5-boiler/dev.env
