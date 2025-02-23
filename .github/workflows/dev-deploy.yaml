@@ -25,6 +25,8 @@ jobs:
       STACK_NAME: dev_cssnr-django5-boiler
       STACK_FILE: docker-compose-swarm.yaml
       CONFIG_FILE: services/shane/django5-boiler/dev.env
+      DEPLOY_ENV: dev
+      DEPLOY_URL: https://django5-dev.cssnr.com/
     secrets:
       SERVICE_CONFIGS_KEY: ${{ secrets.SERVICE_CONFIGS_KEY }}
       PORTAINER_URL: ${{ secrets.PORTAINER_URL }}
