@@ -16,6 +16,12 @@ on:
       CONFIG_FILE:
         required: true
         type: string
+      DEPLOY_ENV:
+        required: true
+        type: string
+      DEPLOY_URL:
+        required: true
+        type: string
     secrets:
       SERVICE_CONFIGS_KEY:
         required: true
@@ -31,6 +37,9 @@ jobs:
     timeout-minutes: 5
     permissions:
       contents: read
+    environment:
+      name: ${{ inputs.DEPLOY_ENV }}
+      url: ${{ inputs.DEPLOY_URL }}
 
     steps:
       - name: "Checkout"
@@ -57,12 +66,12 @@ jobs:
           echo "VERSION=${{ inputs.VERSION }}" | tee -a "service-configs/${{ inputs.CONFIG_FILE }}"
           echo "STACK_NAME=${{ inputs.STACK_NAME }}" | tee -a "service-configs/${{ inputs.CONFIG_FILE }}"
 
-      - name: "Parse Environment"
-        id: parse
-        uses: cssnr/env-json-action@v1
-        with:
-          source: service-configs/${{ inputs.CONFIG_FILE }}
-          sensitive: true
+      #- name: "Parse Environment"
+      #  id: parse
+      #  uses: cssnr/env-json-action@v1
+      #  with:
+      #    source: service-configs/${{ inputs.CONFIG_FILE }}
+      #    sensitive: true
 
       - name: "Portainer Deploy"
         uses: cssnr/portainer-stack-deploy-action@v1
@@ -72,4 +81,5 @@ jobs:
           file: ${{ inputs.STACK_FILE}}
           name: ${{ inputs.STACK_NAME}}
           type: file
-          env_json: "${{ steps.parse.outputs.result }}"
+          #env_json: "${{ steps.parse.outputs.result }}"
+          env_file: "service-configs/${{ inputs.CONFIG_FILE }}"
