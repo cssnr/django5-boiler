@@ -1,15 +1,18 @@
-import httpx
 import logging
 import urllib.parse
 from datetime import datetime, timedelta
-from decouple import config, Csv
+
+import httpx
+from decouple import Csv, config
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.http import HttpRequest
 from django.shortcuts import HttpResponseRedirect, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
+
 from .models import CustomUser
+
 
 logger = logging.getLogger('app')
 

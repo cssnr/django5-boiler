@@ -1,5 +1,7 @@
 from django.contrib import admin
+
 from .models import Contact, Message, MyNews
+
 
 admin.site.register(Message)
 

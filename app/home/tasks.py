@@ -1,5 +1,6 @@
 import json
 import logging
+
 import httpx
 from asgiref.sync import async_to_sync
 from celery import shared_task
@@ -7,10 +8,13 @@ from channels.layers import get_channel_layer
 from django.conf import settings
 from django.core import management
 from django.core.cache import cache
+
 # from django.core.cache.utils import make_template_fragment_key
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+
 from .models import Contact, Message, MyNews
+
 
 logger = logging.getLogger('app')
 

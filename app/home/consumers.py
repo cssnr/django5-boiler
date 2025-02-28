@@ -1,5 +1,7 @@
 import logging
+
 from channels.generic.websocket import AsyncWebsocketConsumer
+
 
 logger = logging.getLogger('app')
 

@@ -1,12 +1,13 @@
 import json
 import logging
 from functools import wraps
+
 from django.conf import settings
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-
-from oauth.models import CustomUser
 from home.tasks import send_discord
+from oauth.models import CustomUser
+
 
 # import io
 # import os

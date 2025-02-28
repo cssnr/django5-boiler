@@ -1,18 +1,24 @@
 import logging
+
 import httpx
+
 # import json
 from django.conf import settings
+
 # from django.core.exceptions import ObjectDoesNotExist
 # from django.contrib import messages
-from django.http import JsonResponse, HttpRequest
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpRequest, JsonResponse
+from django.shortcuts import get_object_or_404, render
+
 # from django.views.decorators.cache import cache_page, cache_control
 # from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+
 # from django.views.decorators.vary import vary_on_cookie
-from .forms import MessageForm, ContactForm
+from .forms import ContactForm, MessageForm
 from .models import Contact, Message, MyNews
-from .tasks import send_discord_message, send_contact_email
+from .tasks import send_contact_email, send_discord_message
+
 
 logger = logging.getLogger('app')
 
