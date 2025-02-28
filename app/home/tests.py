@@ -9,6 +9,7 @@ class TestViews(TestCase):
             "home:news": 200,
             "home:message": 200,
             "home:contact": 200,
+            "oauth:login": 302,
             "api:index": 200,
         }
 
