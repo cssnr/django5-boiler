@@ -15,16 +15,16 @@ def site(request):
     #     timezone.deactivate()
 
     meta = {
-        'author': 'Shane',
-        'title': 'My App',
-        'description': 'My App is a good app...',
+        "author": "Shane",
+        "title": "My App",
+        "description": "My App is a good app...",
     }
 
     navigation = [
-        {'name': 'Home', 'url': 'home:index', 'path': '/'},
-        {'name': 'News', 'url': 'home:news', 'path': '/news/'},
-        {'name': 'Message', 'url': 'home:message', 'path': '/message/'},
-        {'name': 'Contact', 'url': 'home:contact', 'path': '/contact/'},
+        {"name": "Home", "url": "home:index", "path": "/"},
+        {"name": "News", "url": "home:news", "path": "/news/"},
+        {"name": "Message", "url": "home:message", "path": "/message/"},
+        {"name": "Contact", "url": "home:contact", "path": "/contact/"},
     ]
 
     return {
