@@ -94,6 +94,7 @@ jobs:
           python manage.py migrate
 
       - name: "Test App"
+        id: test
         working-directory: app
         run: |
           set -a
@@ -102,11 +103,12 @@ jobs:
           coverage xml
           coverage report
 
-      #- name: "Codecov"
-      #  if: ${{ always() && steps.coverage.outcome == 'success' }}
-      #  uses: codecov/codecov-action@v5
-      #  with:
-      #    token: ${{ secrets.CODECOV_TOKEN }}
+      - name: "Codecov"
+        if: ${{ always() && steps.test.outcome == 'success' }}
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: app/coverage.xml
 
       #- name: "Codacy Coverage"
       #  uses: codacy/codacy-coverage-reporter-action@v1
