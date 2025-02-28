@@ -20,7 +20,7 @@ on:
 jobs:
   build:
     name: "Build"
-    runs-on: ubuntu-latest
+    runs-on: swarm-aarch64
     timeout-minutes: 15
     permissions:
       contents: read
