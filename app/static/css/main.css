@@ -5,14 +5,14 @@ body {
 
 /* Visually Show Disabled Elements on Mouseover */
 .disabled {
-    cursor: not-allowed! important;
+    cursor: not-allowed !important;
 }
 
 /* Recaptcha Border and Load Fix */
 .g-recaptcha {
-    overflow:hidden;
-    width:302px;
-    height:76px;
+    overflow: hidden;
+    width: 302px;
+    height: 76px;
 }
 /*iframe {*/
 /*    margin:-1px 0px 0px -2px;*/
@@ -21,7 +21,7 @@ body {
 /* Modal Fix for Always Show Scrollbar */
 .modal-open {
     overflow-y: scroll !important;
-    padding-right:0 !important;
+    padding-right: 0 !important;
 }
 
 #toast-container {
@@ -49,5 +49,5 @@ body {
 }
 
 .dropdown-menu.auto {
-    min-width:inherit;
+    min-width: inherit;
 }

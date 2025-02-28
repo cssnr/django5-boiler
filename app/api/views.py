@@ -59,36 +59,37 @@ def auth_from_token(view=None, no_fail=False):
 # @login_required
 # @auth_from_token
 
+
 @csrf_exempt
 def api_view(request):
     """
     View  /api/
     """
-    log.debug('api_view: %s - %s', request.method, request.META['PATH_INFO'])
-    log.debug('-'*20)
+    log.debug("api_view: %s - %s", request.method, request.META["PATH_INFO"])
+    log.debug("-" * 20)
 
     try:
-        log.debug('-'*20 + '\n' + json.dumps(request.META) + '\n')
+        log.debug("-" * 20 + "\n" + json.dumps(request.META) + "\n")
     except:  # noqa: E722
-        log.debug('*'*20)
+        log.debug("*" * 20)
         log.debug(request.META)
-    log.debug('-'*20)
+    log.debug("-" * 20)
 
     try:
-        log.debug('-'*20 + '\n' + request.body.decode('utf-8') + '\n')
+        log.debug("-" * 20 + "\n" + request.body.decode("utf-8") + "\n")
     except:  # noqa: E722
-        log.debug('*'*20)
+        log.debug("*" * 20)
         log.debug(request.body)
-    log.debug('-'*20)
+    log.debug("-" * 20)
 
     try:
-        log.debug(json.loads(request.body.decode('utf-8')))
+        log.debug(json.loads(request.body.decode("utf-8")))
     except:  # noqa: E722
-        log.debug('Unable to json.loads - request.body.decode()')
-    log.debug('-'*20)
+        log.debug("Unable to json.loads - request.body.decode()")
+    log.debug("-" * 20)
 
     try:
-        send_discord(json.loads(request.body.decode('utf-8')), settings.DISCORD_WEBHOOK)
+        send_discord(json.loads(request.body.decode("utf-8")), settings.DISCORD_WEBHOOK)
     except Exception as error:
         log.exception(error)
 
