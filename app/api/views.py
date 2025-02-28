@@ -89,9 +89,11 @@ def api_view(request):
     log.debug("-" * 20)
 
     try:
-        send_discord(json.loads(request.body.decode("utf-8")), settings.DISCORD_WEBHOOK)
+        data = json.loads(request.body.decode("utf-8"))
+        content = {"content": f"```json\n{data}\n```"}
+        send_discord(content, settings.DISCORD_WEBHOOK)
     except Exception as error:
-        log.exception(error)
+        log.error(error)
 
     # messages.info(request, 'Welcome Home.')
     return HttpResponse()
