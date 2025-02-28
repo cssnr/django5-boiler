@@ -20,7 +20,7 @@ on:
 jobs:
   build:
     name: "Build"
-    runs-on: self-hosted
+    runs-on: "self-hosted"
     timeout-minutes: 15
     permissions:
       contents: read
