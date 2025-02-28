@@ -8,14 +8,13 @@ on:
     paths-ignore:
       - ".assets/**"
       - ".github/disabled/**"
-      - "app/requirements*"
       - "nginx/**"
+      - "**/requirements*"
       - ".dockerignore"
       - ".gitignore"
       - ".prettierignore"
       - "Makefile"
       - "pyproject.toml"
-      - "requirements.txt"
       - "settings.env.example"
       - "test.env"
 

@@ -7,7 +7,6 @@ extend-exclude = '(migrations|templates|\.github)'
 # Coverage
 # https://coverage.readthedocs.io/en/latest/
 [tool.coverage.run]
-source = ["src"]
 omit = ["venv/*", "migrations/*", "node_modules/*"]
 
 # Isort

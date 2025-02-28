@@ -118,6 +118,9 @@ DATABASES = {
             "isolation_level": "repeatable read",
             "init_command": "SET sql_mode='STRICT_ALL_TABLES'",
         },
+        "TEST": {
+            "NAME": "testdb",
+        },
     },
 }
 
