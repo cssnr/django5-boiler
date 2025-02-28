@@ -24,6 +24,6 @@ def avatar_url(user):
     # return discord avatar url from user model
     if user.avatar_hash:
         return f'https://cdn.discordapp.com/avatars/' \
-               f'{ user.username }/{ user.avatar_hash }.png'
+               f'{user.username}/{user.avatar_hash}.png'
     else:
         return static('images/avatar.png')

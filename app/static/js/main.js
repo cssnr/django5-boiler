@@ -16,11 +16,20 @@ if (backToTop) {
     })
 }
 
+// // Set Timezone Cookie
+// const timezone = Cookies.get('timezone')
+// if (!sessionStorage.getItem('timezone') || !timezone) {
+//     const current = Intl.DateTimeFormat().resolvedOptions().timeZone
+//     if (timezone !== current) {
+//         Cookies.set('timezone', timezone)
+//     }
+// }
+
 // Set Timezone Cookie
-if (!Cookies.get('timezone')) {
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
-    console.debug('tz:', tz)
-    Cookies.set('timezone', tz)
+const timezone = Cookies.get('timezone')
+if (Intl.DateTimeFormat().resolvedOptions().timeZone !== timezone) {
+    console.debug('Setting timezone:', timezone)
+    Cookies.set('timezone', timezone)
 }
 
 if (typeof ClipboardJS !== 'undefined') {

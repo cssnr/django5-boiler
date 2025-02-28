@@ -8,13 +8,14 @@ from . import views
 
 urlpatterns = [
     path('', include('home.urls')),
+    path("api/", include("api.urls")),
     path('oauth/', include('oauth.urls')),
-    path('admin/', admin.site.urls),
+    path('flush-cache/', views.flush_cache_view, name='flush_cache'),
+    path('app-health-check/', views.health_check, name='health_check'),
     path('flower/', RedirectView.as_view(url='/flower/'), name='flower'),
     path('redis/', RedirectView.as_view(url='/redis/'), name='redis'),
     path('phpmyadmin/', RedirectView.as_view(url='/phpmyadmin/'), name='phpmyadmin'),
-    path('flush-cache/', views.flush_cache_view, name='flush_cache'),
-    path('app-health-check/', views.health_check, name='health_check'),
+    path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler400 = 'project.views.handler400_view'

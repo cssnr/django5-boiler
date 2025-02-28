@@ -57,19 +57,26 @@ def save_news_task(news_id, created):
 
 
 @shared_task(autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 60}, rate_limit='10/m')
-def send_discord_message(pk):
-    logger.debug('send_discord_message: pk: %s', pk)
-    message = Message.objects.get(pk=pk)
-    context = {'name': message.name, 'message': message.message}
-    discord_message = render_to_string('message/discord-message.html', context)
-    logger.debug(discord_message)
-    data = {'content': discord_message}
-    r = httpx.post(settings.DISCORD_WEBHOOK, json=data, timeout=10)
+def send_discord(message: dict, webhook=settings.DISCORD_WEBHOOK):
+    logger.debug('send_discord: message: %s', message)
+    logger.debug('webhook: %s', webhook)
+    data = {'content': message}
+    r = httpx.post(webhook, json=data, timeout=10)
     logger.debug(r.status_code)
     if not r.is_success:
         logger.warning(r.content)
         r.raise_for_status()
     return r.status_code
+
+
+@shared_task(autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 60}, rate_limit='10/m')
+def send_discord_message(pk):
+    logger.debug('send_discord_message: pk: %s', pk)
+    message = Message.objects.get(pk=pk)
+    context = {'name': message.name, 'message': message.message}
+    discord_message = render_to_string('message/discord-message.html', context)
+    logger.debug('discord_message: %s', discord_message)
+    return send_discord({'content': discord_message})
 
 
 @shared_task(autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 60}, rate_limit='10/m')
