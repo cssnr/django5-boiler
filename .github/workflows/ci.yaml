@@ -63,7 +63,6 @@ jobs:
           echo inputs.env: ${{ inputs.env }}
           echo env.stack-name: ${{ env.stack-name }}
           echo github.event_name: ${{ github.event_name }}
-          exit 1
 
       # BEGIN Custom
 
