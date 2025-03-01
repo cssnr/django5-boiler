@@ -89,6 +89,7 @@ jobs:
           stack-name: dev_cssnr-django5-boiler
           stack-file: docker-compose-swarm.yaml
           config-file: services/shane/django5-boiler/dev.env
+          config-ssh-key: ${{ secrets.SERVICE_CONFIGS_KEY }}
           portainer-url: ${{ secrets.PORTAINER_URL }}
           portainer-token: ${{ secrets.PORTAINER_TOKEN }}
 
