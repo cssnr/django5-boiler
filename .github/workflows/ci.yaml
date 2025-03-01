@@ -38,8 +38,11 @@ on:
       - "docker-compose-swarm.yaml"
 
 env:
-  stack-name: "${{ inputs.env || 'dev' }}_${{ github.repository }}"
+  stack-name: "${{ inputs.env || 'dev' }}_${{ github.repository_owner }}-${{ github.event.repository.name }}"
   env-name: "${{ inputs.env || 'dev' }}"
+  build: ${{ github.event_name == 'push' && true || inputs.build }}
+  deploy: ${{ github.event_name == 'push' && true || inputs.deploy }}
+  cleanup: ${{ github.event_name == 'push' && true || inputs.cleanup }}
 
 jobs:
   ci:
@@ -59,28 +62,36 @@ jobs:
 
       - name: "Debug"
         run: |
+          echo github.event_name: ${{ github.event_name }}
+
           echo inputs.build: ${{ inputs.build }}
           echo inputs.deploy: ${{ inputs.deploy }}
+          echo inputs.cleanup: ${{ inputs.cleanup }}
+
+          echo env.build: ${{ env.build }}
+          echo env.deploy: ${{ env.deploy }}
+          echo env.cleanup: ${{ env.cleanup }}
+
           echo env.stack-name: ${{ env.stack-name }}
           echo env.env-name: ${{ env.env-name }}
-          echo github.event_name: ${{ github.event_name }}
+          exit 1
 
       # BEGIN Custom - move to custom workflow
 
       - name: "Setup Node 20"
-        if: ${{ github.event_name == 'push' && true || inputs.build }}
+        if: ${{ env.build == 'true' }}
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
       - name: "Set Cache Directory"
-        if: ${{ github.event_name == 'push' && true || inputs.build }}
+        if: ${{ env.build == 'true' }}
         id: npm-cache-dir
         shell: bash
         run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
 
       - name: "Node Cache"
-        if: ${{ github.event_name == 'push' && true || inputs.build }}
+        if: ${{ env.build == 'true' }}
         uses: actions/cache@v4
         id: npm-cache
         with:
@@ -96,12 +107,12 @@ jobs:
           echo "cache-hit: '${{ steps.npm-cache.outputs.cache-hit }}'"
 
       - name: "Install Node"
-        if: ${{ github.event_name == 'push' && true || inputs.build }}
+        if: ${{ env.build == 'true' }}
         run: |
           npm install
 
       - name: "Update SW Cache Version"
-        if: ${{ github.event_name == 'push' && true || inputs.build }}
+        if: ${{ env.build == 'true' }}
         env:
           SERVICE_WORKER: app/static/js/sw.js
         run: |
@@ -112,7 +123,8 @@ jobs:
       # END Custom - move to custom workflow
 
       - name: "Swarm Build Action"
-        if: ${{ github.event_name == 'push' && true || inputs.build }}
+        if: ${{ env.build == 'true' }}
+        #if: ${{ github.event_name == 'push' && true || inputs.build }}
         uses: ./.github/actions/build
         with:
           version: ${{ env.env-name }}
@@ -120,7 +132,8 @@ jobs:
           password: ${{ secrets.GHCR_PASS }}
 
       - name: "Portainer Deploy Action"
-        if: ${{ github.event_name == 'push' && true || inputs.deploy }}
+        if: ${{ env.deploy == 'true' }}
+        #if: ${{ github.event_name == 'push' && true || inputs.deploy }}
         uses: ./.github/actions/deploy
         with:
           version: ${{ env.env-name }}
@@ -131,7 +144,8 @@ jobs:
           portainer-token: ${{ secrets.PORTAINER_TOKEN }}
 
       - name: "Purge Cache"
-        if: ${{ github.event_name == 'push' && true || inputs.cleanup }}
+        if: ${{ env.cleanup == 'true' }}
+        #if: ${{ github.event_name == 'push' && true || inputs.cleanup }}
         uses: cssnr/cloudflare-purge-cache-action@v2
         with:
           token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
