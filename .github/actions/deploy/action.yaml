@@ -64,8 +64,8 @@ runs:
     - name: "Portainer Deploy"
       uses: cssnr/portainer-stack-deploy-action@v1
       with:
-        url: ${{ secrets.portainer-url }}
-        token: ${{ secrets.portainer-token }}
+        url: ${{ inputs.portainer-url }}
+        token: ${{ inputs.portainer-token }}
         file: ${{ inputs.stack-file}}
         name: ${{ inputs.stack-name}}
         type: file
