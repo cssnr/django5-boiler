@@ -1,85 +1,79 @@
 name: "Deploy"
 
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       VERSION:
-        required: true
+        description: "Tag to Deploy"
         type: string
-      STACK_NAME:
         required: true
-        type: string
-      STACK_FILE:
-        required: false
-        type: string
-        default: docker-compose-swarm.yaml
-      CONFIG_FILE:
+        default: "latest"
+      #BUILD:
+      #  description: "Build Image"
+      #  type: boolean
+      #  required: true
+      #  default: true
+      #DEPLOY:
+      #  description: "Deploy Image"
+      #  type: boolean
+      #  required: true
+      #  default: true
+      CLEANUP:
+        description: "Run Cleanup"
+        type: boolean
         required: true
-        type: string
-      DEPLOY_ENV:
-        required: true
-        type: string
-      DEPLOY_URL:
-        required: true
-        type: string
-    secrets:
-      SERVICE_CONFIGS_KEY:
-        required: true
-      PORTAINER_URL:
-        required: true
-      PORTAINER_TOKEN:
-        required: true
+        default: true
+  repository_dispatch:
+    types:
+      - webhook
 
 jobs:
   deploy:
     name: "Deploy"
     runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions:
-      contents: read
-    environment:
-      name: ${{ inputs.DEPLOY_ENV }}
-      url: ${{ inputs.DEPLOY_URL }}
+    timeout-minutes: 15
 
     steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
-
-      - name: "Debug"
+      - name: "Noy Yet!"
         run: |
-          env
-          cat ${{ inputs.STACK_FILE}}
+          echo hello worlds...
 
-      - name: "Checkout Service Configs"
-        uses: actions/checkout@v4
-        with:
-          repository: "hosted-domains/service-configs"
-          ssh-key: ${{ secrets.SERVICE_CONFIGS_KEY }}
-          ref: master
-          path: service-configs
-          sparse-checkout: |
-            ${{ inputs.CONFIG_FILE }}
-          sparse-checkout-cone-mode: false
-
-      - name: "Update Environment"
-        run: |
-          echo "VERSION=${{ inputs.VERSION }}" | tee -a "service-configs/${{ inputs.CONFIG_FILE }}"
-          echo "STACK_NAME=${{ inputs.STACK_NAME }}" | tee -a "service-configs/${{ inputs.CONFIG_FILE }}"
-
-      #- name: "Parse Environment"
-      #  id: parse
-      #  uses: cssnr/env-json-action@v1
-      #  with:
-      #    source: service-configs/${{ inputs.CONFIG_FILE }}
-      #    sensitive: true
-
-      - name: "Portainer Deploy"
-        uses: cssnr/portainer-stack-deploy-action@v1
-        with:
-          url: ${{ secrets.PORTAINER_URL }}
-          token: ${{ secrets.PORTAINER_TOKEN }}
-          file: ${{ inputs.STACK_FILE}}
-          name: ${{ inputs.STACK_NAME}}
-          type: file
-          #env_json: "${{ steps.parse.outputs.result }}"
-          env_file: "service-configs/${{ inputs.CONFIG_FILE }}"
+#  build:
+#    name: "Build"
+#    uses: ./.github/workflows/build.yaml
+#    #if: ${{ inputs.BUILD != '' && inputs.BUILD || true }}
+#    permissions:
+#      contents: read
+#      packages: write
+#    with:
+#      VERSION: ${{ inputs.VERSION != '' && inputs.VERSION || 'latest' }}
+#      GHCR_USER: ${{ vars.GHCR_USER }}
+#    secrets:
+#      GHCR_PASS: ${{ secrets.GHCR_PASS }}
+#
+#  deploy:
+#    name: "Deploy"
+#    uses: ./.github/workflows/deploy.yaml
+#    needs: build
+#    #if: ${{ inputs.DEPLOY != '' && inputs.DEPLOY || true }}
+#    permissions:
+#      contents: read
+#    with:
+#      VERSION: ${{ inputs.VERSION != '' && inputs.VERSION || 'latest' }}
+#      STACK_NAME: prod_cssnr-django5-boiler
+#      STACK_FILE: docker-compose-swarm.yaml
+#      CONFIG_FILE: services/shane/django5-boiler/prod.env
+#      DEPLOY_ENV: prod
+#      DEPLOY_URL: https://django5.cssnr.com/
+#    secrets:
+#      SERVICE_CONFIGS_KEY: ${{ secrets.SERVICE_CONFIGS_KEY }}
+#      PORTAINER_URL: ${{ secrets.PORTAINER_URL }}
+#      PORTAINER_TOKEN: ${{ secrets.PORTAINER_TOKEN }}
+#
+#  cleanup:
+#    name: "Cleanup"
+#    uses: ./.github/workflows/cleanup.yaml
+#    needs: deploy
+#    if: ${{ inputs.CLEANUP != '' && inputs.CLEANUP || true }}
+#    secrets:
+#      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
