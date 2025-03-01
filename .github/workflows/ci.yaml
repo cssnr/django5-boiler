@@ -39,6 +39,7 @@ on:
 
 env:
   stack-name: "${{ inputs.env || 'dev' }}_${{ github.repository }}"
+  env-name: "${{ inputs.env || 'dev' }}"
 
 jobs:
   ci:
@@ -60,11 +61,11 @@ jobs:
         run: |
           echo inputs.build: ${{ inputs.build }}
           echo inputs.deploy: ${{ inputs.deploy }}
-          echo inputs.env: ${{ inputs.env }}
           echo env.stack-name: ${{ env.stack-name }}
+          echo env.env-name: ${{ env.env-name }}
           echo github.event_name: ${{ github.event_name }}
 
-      # BEGIN Custom
+      # BEGIN Custom - move to custom workflow
 
       - name: "Setup Node 20"
         if: ${{ github.event_name == 'push' && true || inputs.build }}
@@ -108,13 +109,13 @@ jobs:
           sed -i "0,/v1/s//v${GITHUB_RUN_NUMBER}/" ${SERVICE_WORKER}
           head ${SERVICE_WORKER} -n 4
 
-      # END Custom
+      # END Custom - move to custom workflow
 
       - name: "Swarm Build Action"
         if: ${{ github.event_name == 'push' && true || inputs.build }}
         uses: ./.github/actions/build
         with:
-          version: ${{ inputs.env }}
+          version: ${{ env.env-name }}
           username: ${{ vars.GHCR_USER }}
           password: ${{ secrets.GHCR_PASS }}
 
@@ -122,9 +123,9 @@ jobs:
         if: ${{ github.event_name == 'push' && true || inputs.deploy }}
         uses: ./.github/actions/deploy
         with:
-          version: ${{ inputs.env }}
+          version: ${{ env.env-name }}
           stack-name: ${{ env.stack-name }}
-          config-file: services/shane/django5-boiler/${{ inputs.env }}.env
+          config-file: services/shane/django5-boiler/${{ env.env-name }}.env
           config-ssh-key: ${{ secrets.SERVICE_CONFIGS_KEY }}
           portainer-url: ${{ secrets.PORTAINER_URL }}
           portainer-token: ${{ secrets.PORTAINER_TOKEN }}
