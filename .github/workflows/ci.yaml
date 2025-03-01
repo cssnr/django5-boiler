@@ -126,7 +126,7 @@ jobs:
       - name: "Swarm Build Action"
         if: ${{ env.build == 'true' }}
         #if: ${{ github.event_name == 'push' && true || inputs.build }}
-        uses: ./.github/actions/build
+        uses: hosted-domains/swarm-build-action@master
         with:
           version: ${{ env.env-name }}
           username: ${{ vars.GHCR_USER }}
@@ -135,7 +135,7 @@ jobs:
       - name: "Portainer Deploy Action"
         if: ${{ env.deploy == 'true' }}
         #if: ${{ github.event_name == 'push' && true || inputs.deploy }}
-        uses: ./.github/actions/deploy
+        uses: hosted-domains/portainer-deploy-action@master
         with:
           version: ${{ env.env-name }}
           stack-name: ${{ env.stack-name }}
