@@ -35,11 +35,13 @@ runs:
     - name: "Debug ${{ github.ref_name }}"
       shell: bash
       run: |
+        echo github.ref_name: '${{ github.ref_name }}'
+
         echo inputs.version: '${{ inputs.version }}'
         echo inputs.stack-name: '${{ inputs.stack-name }}'
         echo inputs.stack-file: '${{ inputs.stack-file }}'
         echo inputs.config-file: '${{ inputs.config-file }}'
-        echo inputs.version: '${{ inputs.version }}'
+        echo inputs.config-ssh-key: '${{ inputs.config-ssh-key }}'
         echo inputs.portainer-url: '${{ inputs.portainer-url }}'
         echo inputs.portainer-token: '${{ inputs.portainer-token }}'
         echo inputs.registry: '${{ inputs.registry }}'

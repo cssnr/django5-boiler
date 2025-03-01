@@ -26,10 +26,13 @@ runs:
     - name: "Debug"
       shell: bash
       run: |
+        echo github.ref_name: '${{ github.ref_name }}'
+
         echo inputs.version: '${{ inputs.version }}'
         echo inputs.username: '${{ inputs.username }}'
         echo inputs.password: '${{ inputs.password }}'
-        echo github.ref_name: '${{ github.ref_name }}'
+        echo inputs.registry: '${{ inputs.registry }}'
+        echo inputs.stack-file: '${{ inputs.stack-file }}'
 
     - name: "TESTING Docker Tags"
       id: dtags
