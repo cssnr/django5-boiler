@@ -3,15 +3,17 @@ name: "Test"
 on:
   workflow_dispatch:
   pull_request:
-    #paths:
-    #  - ".github/workflows/test.yaml"
-    #  - "app/**"
-    #  - "nginx/**"
-    #  - "test.env"
-    #  - "gulpfile.js"
-    #  - "package.json"
-    #  - "package-lock.json"
-    #  - "pyproject.toml"
+  push:
+    branches: [master]
+    paths:
+      - ".github/workflows/test.yaml"
+      - "app/**"
+      - "nginx/**"
+      - "test.env"
+      - "gulpfile.js"
+      - "package.json"
+      - "package-lock.json"
+      - "pyproject.toml"
 
 jobs:
   test:
