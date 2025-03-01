@@ -74,7 +74,6 @@ jobs:
 
           echo env.stack-name: ${{ env.stack-name }}
           echo env.env-name: ${{ env.env-name }}
-          exit 1
 
       # BEGIN Custom - move to custom workflow
 
