@@ -3,8 +3,8 @@ name: "CI"
 on:
   workflow_dispatch:
     inputs:
-      VERSION:
-        description: "Tag to Deploy"
+      version:
+        description: "Version Tag to Deploy"
         type: string
         required: true
         default: "dev"
@@ -78,14 +78,14 @@ jobs:
       - name: "Docker Build"
         uses: ./.github/actions/build
         with:
-          version: ${{ inputs.VERSION != '' && inputs.VERSION || 'dev' }}
+          version: ${{ inputs.version != '' && inputs.version || 'dev' }}
           username: ${{ vars.GHCR_USER }}
           password: ${{ secrets.GHCR_PASS }}
 
       - name: "Portainer Deploy"
         uses: ./.github/actions/deploy
         with:
-          version: ${{ inputs.VERSION != '' && inputs.VERSION || 'dev' }}
+          version: ${{ inputs.version != '' && inputs.version || 'dev' }}
           stack-name: dev_cssnr-django5-boiler
           stack-file: docker-compose-swarm.yaml
           config-file: services/shane/django5-boiler/dev.env
