@@ -1,5 +1,5 @@
-name: "Build"
-description: "Docker Build"
+name: "Swarm Build Action"
+description: "Swarm Build Action for Hosted Domains"
 
 inputs:
   version:

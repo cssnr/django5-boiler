@@ -1,5 +1,5 @@
-name: "Build"
-description: "Docker Build"
+name: "Portainer Deploy Action"
+description: "Portainer Deploy Action for Hosted Domains"
 
 inputs:
   version:
