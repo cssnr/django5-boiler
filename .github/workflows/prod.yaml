@@ -1,52 +1,26 @@
-name: "CI"
+name: "Production"
 
 on:
   workflow_dispatch:
     inputs:
-      build:
-        description: "Run Build"
-        type: boolean
-        default: true
-      deploy:
-        description: "Run Deploy"
-        type: boolean
-        default: true
+      version:
+        description: "Version Tag to Deploy"
+        type: string
+        required: true
+        default: "latest"
       cleanup:
         description: "Run Cleanup"
         type: boolean
-        default: true
-      env:
-        description: "Environment to Deploy"
         required: true
-        default: "dev"
-        type: choice
-        options:
-          - dev
-          - prod
-
-  push:
-    branches-ignore:
-      - master
-    paths:
-      - ".github/workflows/ci.yaml"
-      - "app/**"
-      - "nginx/**"
-      - "gulpfile.js"
-      - "package.json"
-      - "package-lock.json"
-      - "pyproject.toml"
-      - "docker-compose-swarm.yaml"
-
-env:
-  stack-name: "${{ inputs.env || 'dev' }}_${{ github.repository }}"
+        default: true
 
 jobs:
-  ci:
-    name: "CI"
+  prod:
+    name: "Prod"
     runs-on: ubuntu-latest
     timeout-minutes: 15
     concurrency:
-      group: ci
+      group: prod
       cancel-in-progress: true
     permissions:
       contents: read
@@ -58,29 +32,20 @@ jobs:
 
       - name: "Debug"
         run: |
-          echo inputs.build: ${{ inputs.build }}
-          echo inputs.deploy: ${{ inputs.deploy }}
-          echo inputs.env: ${{ inputs.env }}
-          echo env.stack-name: ${{ env.stack-name }}
-          echo github.event_name: ${{ github.event_name }}
-          exit 1
-
-      # BEGIN Custom
+          echo inputs.version: ${{ inputs.version }}
+          echo version: ${{ inputs.version != '' && inputs.version || 'latest' }}
 
       - name: "Setup Node 20"
-        if: ${{ github.event_name == 'push' && true || inputs.build }}
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
       - name: "Set Cache Directory"
-        if: ${{ github.event_name == 'push' && true || inputs.build }}
         id: npm-cache-dir
         shell: bash
         run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
 
       - name: "Node Cache"
-        if: ${{ github.event_name == 'push' && true || inputs.build }}
         uses: actions/cache@v4
         id: npm-cache
         with:
@@ -96,12 +61,10 @@ jobs:
           echo "cache-hit: '${{ steps.npm-cache.outputs.cache-hit }}'"
 
       - name: "Install Node"
-        if: ${{ github.event_name == 'push' && true || inputs.build }}
         run: |
           npm install
 
       - name: "Update SW Cache Version"
-        if: ${{ github.event_name == 'push' && true || inputs.build }}
         env:
           SERVICE_WORKER: app/static/js/sw.js
         run: |
@@ -109,29 +72,25 @@ jobs:
           sed -i "0,/v1/s//v${GITHUB_RUN_NUMBER}/" ${SERVICE_WORKER}
           head ${SERVICE_WORKER} -n 4
 
-      # END Custom
-
-      - name: "Swarm Build Action"
-        if: ${{ github.event_name == 'push' && true || inputs.build }}
+      - name: "Docker Build"
         uses: ./.github/actions/build
         with:
-          version: ${{ inputs.env }}
+          version: ${{ inputs.version != '' && inputs.version || 'latest' }}
           username: ${{ vars.GHCR_USER }}
           password: ${{ secrets.GHCR_PASS }}
 
-      - name: "Portainer Deploy Action"
-        if: ${{ github.event_name == 'push' && true || inputs.deploy }}
+      - name: "Portainer Deploy"
         uses: ./.github/actions/deploy
         with:
-          version: ${{ inputs.env }}
-          stack-name: ${{ env.stack-name }}
-          config-file: services/shane/django5-boiler/${{ inputs.env }}.env
+          version: ${{ inputs.version != '' && inputs.version || 'latest' }}
+          stack-name: dev_cssnr-django5-boiler
+          stack-file: docker-compose-swarm.yaml
+          config-file: services/shane/django5-boiler/dev.env
           config-ssh-key: ${{ secrets.SERVICE_CONFIGS_KEY }}
           portainer-url: ${{ secrets.PORTAINER_URL }}
           portainer-token: ${{ secrets.PORTAINER_TOKEN }}
 
       - name: "Purge Cache"
-        if: ${{ github.event_name == 'push' && true || inputs.cleanup }}
         uses: cssnr/cloudflare-purge-cache-action@v2
         with:
           token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
