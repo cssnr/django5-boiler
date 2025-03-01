@@ -12,23 +12,24 @@ on:
   push:
     branches-ignore:
       - master
-    #paths:
-    #  - ".github/workflows/build.yaml"
-    #  - ".github/workflows/deploy.yaml"
-    #  - ".github/workflows/ci.yaml"
-    #  - "app/**"
-    #  - "nginx/**"
-    #  - "gulpfile.js"
-    #  - "package.json"
-    #  - "package-lock.json"
-    #  - "pyproject.toml"
-    #  - "docker-compose-swarm.yaml"
+    paths:
+      - ".github/workflows/ci.yaml"
+      - "app/**"
+      - "nginx/**"
+      - "gulpfile.js"
+      - "package.json"
+      - "package-lock.json"
+      - "pyproject.toml"
+      - "docker-compose-swarm.yaml"
 
 jobs:
   ci:
     name: "CI"
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    concurrency:
+      group: ci
+      cancel-in-progress: true
     permissions:
       contents: read
       packages: write
