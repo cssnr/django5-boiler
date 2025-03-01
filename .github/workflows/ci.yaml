@@ -38,6 +38,8 @@ on:
       - "docker-compose-swarm.yaml"
 
 env:
+  config-path: shane/django5-boiler
+  purge-domain: cssnr.com
   stack-name: "${{ inputs.env || 'dev' }}_${{ github.repository_owner }}-${{ github.event.repository.name }}"
   env-name: "${{ inputs.env || 'dev' }}"
   build: ${{ github.event_name == 'push' && true || inputs.build }}
@@ -137,7 +139,7 @@ jobs:
         with:
           version: ${{ env.env-name }}
           stack-name: ${{ env.stack-name }}
-          config-file: services/shane/django5-boiler/${{ env.env-name }}.env
+          config-file: services/${{ env.config-path }}/${{ env.env-name }}.env
           config-ssh-key: ${{ secrets.SERVICE_CONFIGS_KEY }}
           portainer-url: ${{ secrets.PORTAINER_URL }}
           portainer-token: ${{ secrets.PORTAINER_TOKEN }}
@@ -148,4 +150,4 @@ jobs:
         uses: cssnr/cloudflare-purge-cache-action@v2
         with:
           token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          domains: cssnr.com
+          domains: ${{ env.purge-domain }}
