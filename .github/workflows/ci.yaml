@@ -38,6 +38,11 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
+      - name: "Debug"
+        run: |
+          echo inputs.version: ${{ inputs.version }}
+          echo version: ${{ inputs.version != '' && inputs.version || 'dev' }}
+
       - name: "Setup Node 20"
         uses: actions/setup-node@v4
         with:
