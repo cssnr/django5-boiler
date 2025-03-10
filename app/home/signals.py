@@ -3,6 +3,7 @@ import logging
 # from celery.signals import worker_ready
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
+
 from home.models import MyNews
 from home.tasks import clear_news_cache, save_news_task
 

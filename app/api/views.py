@@ -5,6 +5,7 @@ from functools import wraps
 from django.conf import settings
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+
 from home.tasks import send_discord
 from oauth.models import CustomUser
 
