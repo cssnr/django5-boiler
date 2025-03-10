@@ -26,6 +26,7 @@ Werkzeug
 
 # Tools
 
+bandit
 black
 coverage
 flake8

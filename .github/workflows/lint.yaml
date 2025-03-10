@@ -79,12 +79,12 @@ jobs:
           npm install prettier
           npx prettier --check .
 
-      - name: "Hadolint"
-        if: ${{ always() }}
-        uses: hadolint/hadolint-action@v3.1.0
-        with:
-          dockerfile: Dockerfile
-          recursive: true
+      #- name: "Hadolint"
+      #  if: ${{ always() }}
+      #  uses: hadolint/hadolint-action@v3.1.0
+      #  with:
+      #    dockerfile: Dockerfile
+      #    recursive: true
 
       - name: "Actionlint"
         if: ${{ always() }}

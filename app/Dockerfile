@@ -7,7 +7,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 RUN apk add --update --no-cache alpine-sdk mysql-dev
 
 COPY requirements.txt .
-RUN python3 -m pip install --no-cache-dir --upgrade pip  &&\
+RUN python3 -m pip install --no-cache-dir -U pip  &&\
     python3 -m pip install --no-cache-dir -r requirements.txt
 
 
