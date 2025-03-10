@@ -102,7 +102,7 @@ jobs:
       #    dockerfile: Dockerfile
       #    recursive: true
 
-      - name: "yamllint"
+      - name: "Yamllint"
         if: ${{ always() && !cancelled() }}
         env:
           CONFIG: "{extends: relaxed, ignore: [node_modules/], rules: {line-length: {max: 119}}}"
