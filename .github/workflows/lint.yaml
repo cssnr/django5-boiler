@@ -56,36 +56,36 @@ jobs:
           python -m pip install -Ur app/requirements.txt
 
       - name: "Flake8"
-        if: ${{ always() && !cancelled() }}
+        if: ${{ !cancelled() }}
         run: |
           flake8 --max-line-length 119 --extend-exclude "venv,node_modules,migrations"
 
       - name: "Ruff"
-        if: ${{ always() && !cancelled() }}
+        if: ${{ !cancelled() }}
         uses: astral-sh/ruff-action@v3
         with:
           version: latest
 
       - name: "Black"
-        if: ${{ always() && !cancelled() }}
+        if: ${{ !cancelled() }}
         uses: psf/black@stable
 
       - name: "Isort"
-        if: ${{ always() && !cancelled() }}
+        if: ${{ !cancelled() }}
         uses: isort/isort-action@v1
 
       - name: "Mypy"
-        if: ${{ always() && !cancelled() }}
+        if: ${{ !cancelled() }}
         run: |
           mypy .
 
       - name: "Bandit"
-        if: ${{ always() && !cancelled() }}
+        if: ${{ !cancelled() }}
         run: |
           bandit .
 
       - name: "Prettier"
-        if: ${{ always() && !cancelled() }}
+        if: ${{ !cancelled() }}
         run: |
           echo "::group::Install"
           npm install prettier
@@ -93,14 +93,14 @@ jobs:
           npx prettier --check .
 
       #- name: "Hadolint"
-      #  if: ${{ always() && !cancelled() }}
+      #  if: ${{ !cancelled() }}
       #  uses: hadolint/hadolint-action@v3.1.0
       #  with:
       #    dockerfile: Dockerfile
       #    recursive: true
 
       - name: "Yamllint"
-        if: ${{ always() && !cancelled() }}
+        if: ${{ !cancelled() }}
         env:
           CONFIG: "{extends: relaxed, ignore: [node_modules/], rules: {line-length: {max: 119}}}"
         run: |
@@ -110,7 +110,7 @@ jobs:
           yamllint -d '${{ env.CONFIG }}' .
 
       - name: "Actionlint"
-        if: ${{ always() && !cancelled() }}
+        if: ${{ !cancelled() }}
         run: |
           echo "::group::Download"
           loc=$(curl -sI https://github.com/rhysd/actionlint/releases/latest | grep -i '^location:')
@@ -124,6 +124,10 @@ jobs:
           "${RUNNER_TEMP}/actionlint" --version
           echo "::endgroup::"
           "${RUNNER_TEMP}/actionlint" -color -verbose -shellcheck= -pyflakes=
+
+      #- name: "Vale"
+      #  if: ${{ !cancelled() }}
+      #  uses: errata-ai/vale-action@v2.1.1
 
       #- name: "SonarQube"
       #  uses: SonarSource/sonarqube-scan-action@v4
