@@ -32,3 +32,4 @@ coverage
 flake8
 mypy
 ruff
+yamllint
