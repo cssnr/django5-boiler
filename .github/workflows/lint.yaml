@@ -63,6 +63,8 @@ jobs:
       - name: "Ruff"
         if: ${{ always() && !cancelled() }}
         uses: astral-sh/ruff-action@v3
+        with:
+          version: latest
 
       - name: "Black"
         if: ${{ always() && !cancelled() }}
@@ -118,8 +120,8 @@ jobs:
           echo "url: ${url}"
           curl -sL "${url}" | tar xz -C "${RUNNER_TEMP}" actionlint
           file "${RUNNER_TEMP}/actionlint"
-          echo "::endgroup::"
           "${RUNNER_TEMP}/actionlint" --version
+          echo "::endgroup::"
           "${RUNNER_TEMP}/actionlint" -color -verbose -shellcheck= -pyflakes=
 
       #- name: "SonarQube"
