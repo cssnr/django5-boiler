@@ -106,7 +106,7 @@ jobs:
           coverage report
 
       - name: "Codecov"
-        if: ${{ always() && steps.test.outcome == 'success' }}
+        #if: ${{ always() && steps.test.outcome == 'success' }}
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
