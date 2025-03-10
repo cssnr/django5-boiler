@@ -8,7 +8,6 @@ extend-exclude = '(migrations|templates|\.github)'
 # https://coverage.readthedocs.io/en/latest/
 [tool.coverage.run]
 omit = ["venv/*", "migrations/*", "node_modules/*"]
-source = ["src"]
 
 # Isort
 # https://pycqa.github.io/isort/docs/configuration/options.html
