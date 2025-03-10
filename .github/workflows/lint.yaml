@@ -38,7 +38,6 @@ jobs:
       #    cat "${GITHUB_EVENT_PATH}"
 
       - name: "Debug"
-        if: ${{ always() }}
         run: |
           echo "github.workflow: ${{ github.workflow }}"
           echo "pull_request.number: ${{ github.event.pull_request.number }}"
@@ -57,57 +56,57 @@ jobs:
           python -m pip install -Ur app/requirements.txt
 
       - name: "Flake8"
-        if: ${{ always() }}
+        if: ${{ always() && !cancelled() }}
         run: |
           flake8 --max-line-length 119 --extend-exclude "venv,node_modules,migrations"
 
       - name: "Ruff"
-        if: ${{ always() }}
+        if: ${{ always() && !cancelled() }}
         uses: astral-sh/ruff-action@v3
 
       - name: "Black"
-        if: ${{ always() }}
+        if: ${{ always() && !cancelled() }}
         uses: psf/black@stable
 
       - name: "Isort"
-        if: ${{ always() }}
+        if: ${{ always() && !cancelled() }}
         uses: isort/isort-action@v1
 
       - name: "Mypy"
-        if: ${{ always() }}
+        if: ${{ always() && !cancelled() }}
         run: |
           mypy .
 
       - name: "Bandit"
-        if: ${{ always() }}
+        if: ${{ always() && !cancelled() }}
         run: |
           bandit .
 
       - name: "Prettier"
-        if: ${{ always() }}
+        if: ${{ always() && !cancelled() }}
         run: |
           npm install prettier
           npx prettier --check .
 
       - name: "Bandit"
-        if: ${{ always() }}
+        if: ${{ always() && !cancelled() }}
         run: |
           bandit src
 
       - name: "yamllint"
-        if: ${{ always() }}
+        if: ${{ always() && !cancelled() }}
         run: |
           yamllint -d '{extends: relaxed, rules: {line-length: {max: 119}}}' .
 
       #- name: "Hadolint"
-      #  if: ${{ always() }}
+      #  if: ${{ always() && !cancelled() }}
       #  uses: hadolint/hadolint-action@v3.1.0
       #  with:
       #    dockerfile: Dockerfile
       #    recursive: true
 
       - name: "Actionlint"
-        if: ${{ always() }}
+        if: ${{ always() && !cancelled() }}
         run: |
           tag=$(curl -sI https://github.com/rhysd/actionlint/releases/latest | grep -i '^location:' | sed -E 's|.*/tag/v?(.*)|\1|' | tr -d '\t\r\n')
           echo "tag: ${tag}"
