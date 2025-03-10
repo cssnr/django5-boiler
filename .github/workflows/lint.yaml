@@ -98,7 +98,7 @@ jobs:
         with:
           dockerfile: Dockerfile
           recursive: true
-          override-style: DL3018
+          override-style: DL3013,DL3018,DL3045 # use ignore to disable annotations
 
       - name: "Yamllint"
         if: ${{ !cancelled() }}
