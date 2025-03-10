@@ -79,6 +79,11 @@ jobs:
           npm install prettier
           npx prettier --check .
 
+      - name: "Bandit"
+        if: ${{ always() }}
+        run: |
+          yamllint -d '{extends: relaxed, rules: {line-length: {max: 119}}}' .
+
       #- name: "Hadolint"
       #  if: ${{ always() }}
       #  uses: hadolint/hadolint-action@v3.1.0
