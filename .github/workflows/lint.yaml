@@ -96,7 +96,9 @@ jobs:
       - name: "yamllint"
         if: ${{ always() && !cancelled() }}
         run: |
+          echo "::group::List Files"
           yamllint -d '{extends: relaxed, ignore: [node_modules/]}' --list-files .
+          echo "::endgroup::"
           yamllint -d '{extends: relaxed, ignore: [node_modules/]}' .
 
       #- name: "Hadolint"
