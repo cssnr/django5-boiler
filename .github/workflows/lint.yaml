@@ -92,12 +92,13 @@ jobs:
           echo "::endgroup::"
           npx prettier --check .
 
-      #- name: "Hadolint"
-      #  if: ${{ !cancelled() }}
-      #  uses: hadolint/hadolint-action@v3.1.0
-      #  with:
-      #    dockerfile: Dockerfile
-      #    recursive: true
+      - name: "Hadolint"
+        if: ${{ !cancelled() }}
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+          recursive: true
+          override-style: DL3018
 
       - name: "Yamllint"
         if: ${{ !cancelled() }}
