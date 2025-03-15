@@ -13,8 +13,11 @@ on:
       - ".dockerignore"
       - ".gitignore"
       - "Makefile"
-      - "pyproject.toml"
       - "*.env*"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   lint:
@@ -82,7 +85,7 @@ jobs:
       - name: "Bandit"
         if: ${{ !cancelled() }}
         run: |
-          bandit .
+          bandit -c pyproject.toml -r .
 
       - name: "Prettier"
         if: ${{ !cancelled() }}
@@ -98,7 +101,7 @@ jobs:
         with:
           dockerfile: Dockerfile
           recursive: true
-          override-style: DL3013,DL3018,DL3045 # use ignore to disable annotations
+          ignore: DL3013,DL3018,DL3045
 
       - name: "Yamllint"
         if: ${{ !cancelled() }}

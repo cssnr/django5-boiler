@@ -15,6 +15,10 @@ on:
       - "package-lock.json"
       - "pyproject.toml"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     name: "Test"
@@ -107,6 +111,7 @@ jobs:
 
       - name: "Codecov"
         #if: ${{ always() && steps.test.outcome == 'success' }}
+        continue-on-error: true # will fail if external PR due to secrets
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
