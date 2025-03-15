@@ -80,7 +80,7 @@ jobs:
       - name: "Mypy"
         if: ${{ !cancelled() }}
         run: |
-          mypy .
+          mypy -v .
 
       - name: "Bandit"
         if: ${{ !cancelled() }}
