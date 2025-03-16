@@ -69,6 +69,7 @@ jobs:
       - name: "Debug"
         continue-on-error: true
         run: |
+          echo group: ${{ inputs.env || 'dev' }}
           echo github.event_name: ${{ github.event_name }}
 
           echo inputs.build: ${{ inputs.build }}
