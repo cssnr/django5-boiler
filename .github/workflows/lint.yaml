@@ -40,16 +40,10 @@ jobs:
       #  run: |
       #    cat "${GITHUB_EVENT_PATH}"
 
-      - name: "Debug"
-        run: |
-          echo "github.workflow: ${{ github.workflow }}"
-          echo "pull_request.number: ${{ github.event.pull_request.number }}"
-          echo "${{ github.workflow }}-${{ github.event.pull_request.number }}"
-
-      - name: "Setup Python 3.13"
+      - name: "Setup Python 3.12"
         uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
+          python-version: "3.12"
           #cache: "pip"
 
       - name: "Install"
@@ -57,6 +51,18 @@ jobs:
         run: |
           python -m pip install -U pip
           python -m pip install -Ur app/requirements.txt
+
+      - name: "Debug"
+        run: |
+          echo "github.workflow: ${{ github.workflow }}"
+          echo "github.ref: ${{ github.ref }}"
+          echo "pull_request.number: ${{ github.event.pull_request.number }}"
+
+          echo "group: ${{ github.workflow }}-${{ github.ref }}"
+
+          echo "::group::pip freeze"
+          python -m pip freeze
+          echo "::endgroup::"
 
       - name: "Flake8"
         if: ${{ !cancelled() }}
@@ -80,7 +86,7 @@ jobs:
       - name: "Mypy"
         if: ${{ !cancelled() }}
         run: |
-          mypy -v .
+          mypy .
 
       - name: "Bandit"
         if: ${{ !cancelled() }}
