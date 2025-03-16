@@ -50,20 +50,20 @@ jobs:
         id: install
         run: |
           python -m pip install -U pip
-          python -m pip install -Ur app/requirements.txt
+          python -m pip install -r app/requirements.txt
 
       - name: "Debug"
         continue-on-error: true
         run: |
           set +e
+          echo "group: ${{ github.workflow }}-${{ github.ref }}"
+
           echo "github.workflow: ${{ github.workflow }}"
           echo "github.ref: ${{ github.ref }}"
           echo "pull_request.number: ${{ github.event.pull_request.number }}"
 
-          echo "group: ${{ github.workflow }}-${{ github.ref }}"
-
-          python -V
           which python
+          python -V
 
           echo "::group::pip freeze"
           python -m pip freeze
@@ -73,17 +73,10 @@ jobs:
           python -m pip list --outdated
           echo "::endgroup::"
 
-          echo "::group::set"
-          set -o
-          echo "::endgroup::"
-
           echo "::group::env"
           env
           echo "::endgroup::"
 
-      - name: "Debug"
-        continue-on-error: true
-        run: |
           echo "::group::set"
           set -o
           echo "::endgroup::"

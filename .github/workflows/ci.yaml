@@ -45,6 +45,10 @@ env:
   deploy: ${{ github.event_name == 'push' && true || inputs.deploy }}
   cleanup: ${{ github.event_name == 'push' && true || inputs.cleanup }}
 
+concurrency:
+  group: ${{ env.env-name }}
+  cancel-in-progress: true
+
 jobs:
   ci:
     name: "CI"
@@ -63,6 +67,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: "Debug"
+        continue-on-error: true
         run: |
           echo github.event_name: ${{ github.event_name }}
 
@@ -77,35 +82,33 @@ jobs:
           echo env.stack-name: ${{ env.stack-name }}
           echo env.env-name: ${{ env.env-name }}
 
-      # BEGIN Custom - move to custom workflow
-
       - name: "Setup Node 22"
         if: ${{ env.build == 'true' }}
         uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      - name: "Set Cache Directory"
-        if: ${{ env.build == 'true' }}
-        id: npm-cache-dir
-        shell: bash
-        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+      #- name: "Set Cache Directory"
+      #  if: ${{ env.build == 'true' }}
+      #  id: npm-cache-dir
+      #  shell: bash
+      #  run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
 
-      - name: "Node Cache"
-        if: ${{ env.build == 'true' }}
-        uses: actions/cache@v4
-        id: npm-cache
-        with:
-          path: ${{ steps.npm-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      #- name: "Node Cache"
+      #  if: ${{ env.build == 'true' }}
+      #  uses: actions/cache@v4
+      #  id: npm-cache
+      #  with:
+      #    path: ${{ steps.npm-cache-dir.outputs.dir }}
+      #    key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      #    restore-keys: |
+      #      ${{ runner.os }}-node-
 
-      - name: "Node Cache Hit"
-        if: ${{ steps.npm-cache.outputs.cache-hit }}
-        run: |
-          echo "dir: '${{ steps.npm-cache-dir.outputs.dir }}'"
-          echo "cache-hit: '${{ steps.npm-cache.outputs.cache-hit }}'"
+      #- name: "Node Cache Hit"
+      #  if: ${{ steps.npm-cache.outputs.cache-hit }}
+      #  run: |
+      #    echo "dir: '${{ steps.npm-cache-dir.outputs.dir }}'"
+      #    echo "cache-hit: '${{ steps.npm-cache.outputs.cache-hit }}'"
 
       - name: "Install Node"
         if: ${{ env.build == 'true' }}
