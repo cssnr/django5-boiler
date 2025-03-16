@@ -39,14 +39,14 @@ on:
 env:
   config-path: shane/django5-boiler
   purge-domain: cssnr.com
-  stack-name: "${{ inputs.env || 'dev' }}_${{ github.repository_owner }}-${{ github.event.repository.name }}"
-  env-name: "${{ inputs.env || 'dev' }}"
+  stack-name: ${{ inputs.env || 'dev' }}_${{ github.repository_owner }}-${{ github.event.repository.name }}
+  env-name: ${{ inputs.env || 'dev' }}
   build: ${{ github.event_name == 'push' && true || inputs.build }}
   deploy: ${{ github.event_name == 'push' && true || inputs.deploy }}
   cleanup: ${{ github.event_name == 'push' && true || inputs.cleanup }}
 
 concurrency:
-  group: ${{ env.env-name }}
+  group: ${{ inputs.env || 'dev' }}
   cancel-in-progress: true
 
 jobs:
