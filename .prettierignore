@@ -10,6 +10,7 @@ app/static/swagger/SwaggerDark.css
 # Build
 dist/
 node_modules/
+.github/disabled/
 
 # Tools
 .ruff_cache/

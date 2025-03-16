@@ -6,9 +6,9 @@ ENV PYTHONDONTWRITEBYTECODE=1
 #RUN apk add --update --no-cache alpine-sdk mysql-dev gcc libffi-dev musl-dev
 RUN apk add --update --no-cache alpine-sdk mysql-dev
 
-COPY requirements.txt .
-RUN python3 -m pip install --no-cache-dir --upgrade pip  &&\
-    python3 -m pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt /
+RUN python3 -m pip install --no-cache-dir -U pip  &&\
+    python3 -m pip install --no-cache-dir -r /requirements.txt
 
 
 FROM python:3.12-alpine
