@@ -66,6 +66,12 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
+      - name: "Debug event.json"
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        run: |
+          cat "${GITHUB_EVENT_PATH}"
+
       - name: "Debug"
         continue-on-error: true
         run: |

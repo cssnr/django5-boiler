@@ -139,7 +139,7 @@ jobs:
           coverage report
 
       - name: "Codecov"
-        #if: ${{ always() && steps.test.outcome == 'success' }}
+        #if: ${{ !cancelled() && steps.test.outcome == 'success' }}
         continue-on-error: true # will fail if external PR due to secrets
         uses: codecov/codecov-action@v5
         with:

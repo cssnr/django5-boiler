@@ -26,10 +26,15 @@ if (backToTop) {
 // }
 
 // Set Timezone Cookie
+
+/**
+ * @type {string|undefined}
+ */
 const timezone = Cookies.get('timezone')
-if (Intl.DateTimeFormat().resolvedOptions().timeZone !== timezone) {
-    console.debug('Setting timezone:', timezone)
-    Cookies.set('timezone', timezone)
+const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
+if (timezone !== tz) {
+    console.debug('Setting timezone:', tz)
+    Cookies.set('timezone', tz)
 }
 
 if (typeof ClipboardJS !== 'undefined') {
