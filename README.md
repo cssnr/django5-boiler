@@ -1,10 +1,10 @@
-[![Prod Deploy](https://img.shields.io/github/actions/workflow/status/cssnr/django5-boiler/prod-deploy.yaml?logo=github&logoColor=white&label=deploy)](https://github.com/cssnr/django5-boiler/actions/workflows/prod-deploy.yaml)
-[![Dev CI](https://img.shields.io/github/actions/workflow/status/cssnr/django5-boiler/dev-ci.yaml?logo=github&logoColor=white&label=ci)](https://github.com/cssnr/django5-boiler/actions/workflows/dev-ci.yaml)
-[![Test](https://img.shields.io/github/actions/workflow/status/cssnr/django5-boiler/test.yaml?logo=github&logoColor=white&label=test)](https://github.com/cssnr/django5-boiler/actions/workflows/test.yaml)
+[![CI](https://img.shields.io/github/actions/workflow/status/cssnr/django5-boiler/ci.yaml?logo=github&label=ci)](https://github.com/cssnr/django5-boiler/actions/workflows/ci.yaml)
+[![Lint](https://img.shields.io/github/actions/workflow/status/cssnr/django5-boiler/lint.yaml?logo=github&label=lint)](https://github.com/cssnr/django5-boiler/actions/workflows/lint.yaml)
+[![Test](https://img.shields.io/github/actions/workflow/status/cssnr/django5-boiler/test.yaml?logo=github&label=test)](https://github.com/cssnr/django5-boiler/actions/workflows/test.yaml)
 [![Codecov](https://codecov.io/gh/cssnr/django5-boiler/graph/badge.svg?token=6YSWJ1E6BJ)](https://codecov.io/gh/cssnr/django5-boiler)
-[![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/django5-boiler?logo=github&logoColor=white&label=updated)](https://github.com/cssnr/django5-boiler/graphs/commit-activity)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/django5-boiler?logo=github&label=updated)](https://github.com/cssnr/django5-boiler/graphs/commit-activity)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/django5-boiler?logo=htmx&logoColor=white)](https://github.com/cssnr/django5-boiler)
-[![GitHub Org Stars](https://img.shields.io/github/stars/cssnr?style=flat&logo=github&logoColor=white)](https://cssnr.github.io/)
+[![GitHub Org Stars](https://img.shields.io/github/stars/cssnr?style=flat&logo=github&label=org%20stars)](https://cssnr.github.io/)
 [![Discord](https://img.shields.io/discord/899171661457293343?logo=discord&logoColor=white&label=discord&color=7289da)](https://discord.gg/wXy6m2X8wY)
 
 # Django 5 Boilerplate
