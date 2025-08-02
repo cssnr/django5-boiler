@@ -1,5 +1,6 @@
 import json
 import logging
+from typing import Union
 
 import httpx
 from asgiref.sync import async_to_sync
@@ -33,7 +34,7 @@ def flush_template_cache():
     return cache.delete_pattern("template.cache.*")
 
 
-@shared_task(autoretry_for=(Exception,), retry_kwargs={"max_retries": 3, "countdown": 10})
+@shared_task(autoretry_for=(Exception,), retry_kwargs={"max_retries": 2, "countdown": 10})
 def clear_news_cache():
     # Clear News cache on model update
     logger.debug("clear_news_cache")
@@ -61,10 +62,14 @@ def save_news_task(news_id, created):
 
 
 @shared_task(autoretry_for=(Exception,), retry_kwargs={"max_retries": 3, "countdown": 60}, rate_limit="10/m")
-def send_discord(message: dict, webhook=settings.DISCORD_WEBHOOK):
+def send_discord(message: Union[dict, str], webhook=settings.DISCORD_WEBHOOK):
     logger.debug("send_discord: message: %s", message)
     logger.debug("webhook: %s", webhook)
-    data = {"content": message}
+    if isinstance(message, dict):
+        data = message
+    else:
+        data = {"content": message}
+    logger.debug("data: %s", data)
     r = httpx.post(webhook, json=data, timeout=10)
     logger.debug(r.status_code)
     if not r.is_success:
@@ -73,12 +78,14 @@ def send_discord(message: dict, webhook=settings.DISCORD_WEBHOOK):
     return r.status_code
 
 
-@shared_task(autoretry_for=(Exception,), retry_kwargs={"max_retries": 3, "countdown": 60}, rate_limit="10/m")
+@shared_task()
 def send_discord_message(pk):
     logger.debug("send_discord_message: pk: %s", pk)
     message = Message.objects.get(pk=pk)
     context = {"name": message.name, "message": message.message}
+    logger.debug("message.message: %s", message.message)
     discord_message = render_to_string("message/discord-message.html", context)
+    logger.debug("type(discord_message): %s", type(discord_message))
     logger.debug("discord_message: %s", discord_message)
     return send_discord({"content": discord_message})
 
