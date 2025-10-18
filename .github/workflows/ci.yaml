@@ -64,7 +64,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: "Debug event.json"
         if: ${{ !cancelled() }}
@@ -89,11 +89,11 @@ jobs:
           echo env.stack-name: ${{ env.stack-name }}
           echo env.env-name: ${{ env.env-name }}
 
-      - name: "Setup Node 22"
+      - name: "Setup Node 24"
         if: ${{ env.build == 'true' }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version: 24
 
       #- name: "Set Cache Directory"
       #  if: ${{ env.build == 'true' }}
