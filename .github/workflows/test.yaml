@@ -2,7 +2,6 @@ name: "Test"
 
 on:
   workflow_dispatch:
-  pull_request:
   push:
     branches: [master]
     paths:
@@ -14,6 +13,7 @@ on:
       - "package.json"
       - "package-lock.json"
       - "pyproject.toml"
+  pull_request:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -54,7 +54,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: "Setup Python 3.12"
         uses: actions/setup-python@v5
@@ -82,10 +82,10 @@ jobs:
           python -m pip install -r requirements.txt
           python -m pip install coverage
 
-      - name: "Setup Node 22"
-        uses: actions/setup-node@v4
+      - name: "Setup Node 24"
+        uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version: 24
 
       - name: "Node Install"
         run: |
