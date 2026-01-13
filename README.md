@@ -1,21 +1,34 @@
-[![CI](https://img.shields.io/github/actions/workflow/status/cssnr/django5-boiler/ci.yaml?logo=github&label=ci)](https://github.com/cssnr/django5-boiler/actions/workflows/ci.yaml)
-[![Lint](https://img.shields.io/github/actions/workflow/status/cssnr/django5-boiler/lint.yaml?logo=github&label=lint)](https://github.com/cssnr/django5-boiler/actions/workflows/lint.yaml)
-[![Test](https://img.shields.io/github/actions/workflow/status/cssnr/django5-boiler/test.yaml?logo=github&label=test)](https://github.com/cssnr/django5-boiler/actions/workflows/test.yaml)
+[![Image Size](https://badges.cssnr.com/ghcr/size/cssnr/django5-boiler-app)](https://github.com/orgs/cssnr/packages/container/package/django5-boiler-app)
+[![CI](https://img.shields.io/github/actions/workflow/status/cssnr/django5-boiler/ci.yaml?logo=verizon&label=ci)](https://github.com/cssnr/django5-boiler/actions/workflows/ci.yaml)
+[![Lint](https://img.shields.io/github/actions/workflow/status/cssnr/django5-boiler/lint.yaml?logo=verizon&label=lint)](https://github.com/cssnr/django5-boiler/actions/workflows/lint.yaml)
+[![Test](https://img.shields.io/github/actions/workflow/status/cssnr/django5-boiler/test.yaml?logo=verizon&label=test)](https://github.com/cssnr/django5-boiler/actions/workflows/test.yaml)
 [![Codecov](https://codecov.io/gh/cssnr/django5-boiler/graph/badge.svg?token=6YSWJ1E6BJ)](https://codecov.io/gh/cssnr/django5-boiler)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/django5-boiler?logo=github&label=updated)](https://github.com/cssnr/django5-boiler/graphs/commit-activity)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/django5-boiler?logo=htmx&logoColor=white)](https://github.com/cssnr/django5-boiler)
 [![GitHub Org Stars](https://img.shields.io/github/stars/cssnr?style=flat&logo=github&label=org%20stars)](https://cssnr.github.io/)
 [![Discord](https://img.shields.io/discord/899171661457293343?logo=discord&logoColor=white&label=discord&color=7289da)](https://discord.gg/wXy6m2X8wY)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-73a4f1?logo=kofi&label=Support)](https://ko-fi.com/cssnr)
 
 # Django 5 Boilerplate
 
-My App is Good.
+- [Environment](#environment)
+- [Compose Files](#compose-files)
+- [Workflow Files](#workflow-files)
+- [Development](#development)
 
-Coming soon...
+Deploy with Standalone Docker.
 
-# Workflows
+```shell
+docker compose -f docker-compose-stack.yaml up
+```
 
-## GitHub Variables and Secrets
+Deploy with Docker Swarm.
+
+```shell
+docker stack deploy -c docker-compose-swarm.yaml django5-boiler
+```
+
+## Environment
 
 These variables/secrets are used by various workflows...
 
@@ -28,7 +41,15 @@ These variables/secrets are used by various workflows...
 | PORTAINER_TOKEN      | secrets | Portainer Token                                                                  |
 | CLOUDFLARE_API_TOKEN | secrets | **Optional** Cloudflare Token                                                    |
 
-## Workflow Variables
+## Compose Files
+
+| File                                                   | Description                   |
+| ------------------------------------------------------ | ----------------------------- |
+| [docker-compose.yaml](docker-compose.yaml)             | Docker Development Stack File |
+| [docker-compose-stack.yaml](docker-compose-stack.yaml) | Docker Standalone Stack File  |
+| [docker-compose-swarm.yaml](docker-compose-swarm.yaml) | Docker Swarm Stack File       |
+
+## Workflow Files
 
 These are convoluted because GitHub wanted to block variables to punish us.
 
@@ -42,8 +63,8 @@ These are convoluted because GitHub wanted to block variables to punish us.
 
 ```shell
 cp settings.env.example settings.env
-vim settings.env
+vim settings.env # edit accordingly
 set -a; source settings.env; set +a
 npm install
-docker compose -f docker-compose-dev.yaml up --build --remove-orphans --force-recreate
+docker compose up --watch --build --force-recreate
 ```

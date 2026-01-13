@@ -45,7 +45,9 @@ services:
       - internal
 
   app:
-    build: app
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
     image: ghcr.io/cssnr/django5-boiler-app:${VERSION:-latest}
     environment: &environment
       DJANGO_SUPERUSER_USERNAME: ${DJANGO_SUPERUSER_USERNAME}
