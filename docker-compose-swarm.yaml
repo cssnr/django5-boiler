@@ -4,6 +4,7 @@ services:
   nginx:
     build: nginx
     image: ghcr.io/cssnr/django5-boiler-nginx:${VERSION:-latest}
+    env_file: settings.env
     deploy:
       mode: global
       resources:

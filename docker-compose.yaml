@@ -4,19 +4,20 @@ services:
   nginx:
     build:
       context: nginx
-    image: myapp-nginx:${VERSION:-latest}
+    image: django5-boiler-nginx:latest
+    env_file: settings.env
     deploy:
       mode: global
       resources:
         limits:
           cpus: "1.0"
           memory: 32M
-    healthcheck:
-      test: ["CMD-SHELL", "curl -sf localhost:80/health-check || exit 1"]
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
+    #healthcheck:
+    #  test: ["CMD-SHELL", "curl -sf localhost:80/health-check || exit 1"]
+    #  interval: 10s
+    #  timeout: 10s
+    #  retries: 3
+    #  start_period: 10s
     volumes:
       - data_dir:/data
     secrets:
@@ -24,21 +25,32 @@ services:
         target: /etc/nginx/auth.users
     depends_on:
       - app
+      - flower
+      - redis-commander
+      - phpmyadmin
     ports:
       - "80:80"
+    develop:
+      watch:
+        - action: rebuild
+          path: nginx
 
   app:
     build:
-      context: app
-    image: myapp-app:${VERSION:-latest}
+      context: .
+      dockerfile: ./app/Dockerfile
+    image: django5-boiler-app:latest
     env_file: settings.env
-    command: "gunicorn project.asgi:application -b 0.0.0.0:9000 -w 2 -k uvicorn.workers.UvicornWorker"
-    healthcheck:
-      test: ["CMD", "curl", "-sf", "http://localhost:9000/app-health-check/"]
-      interval: 1m
-      timeout: 10s
-      retries: 3
-      start_period: 10s
+    #command: "watchmedo auto-restart -d /app -p '*.py;*.html' -R -- gunicorn project.asgi:application -b 0.0.0.0:9000 -w 1 -k uvicorn.workers.UvicornWorker"
+    #command: "gunicorn project.asgi:application -b 0.0.0.0:9000 -w 1 -k uvicorn.workers.UvicornWorker --reload"
+    command: "uvicorn project.asgi:application --host 0.0.0.0 --port 9000 --reload --reload-include *.html"
+    #command: "sh -c 'python manage.py runserver 0.0.0.0:9000'"
+    #healthcheck:
+    #  test: ["CMD", "curl", "-sf", "http://localhost:9000/app-health-check/"]
+    #  interval: 1m
+    #  timeout: 10s
+    #  retries: 3
+    #  start_period: 10s
     deploy:
       mode: global
       resources:
@@ -49,9 +61,28 @@ services:
       - data_dir:/data
     depends_on:
       - redis
+    develop:
+      watch:
+        - action: sync
+          path: app
+          target: app
+        #- action: sync+exec
+        #  path: app/templates
+        #  target: app/templates
+        #  exec:
+        #    command: "pkill -HUP gunicorn"
+        - action: sync+exec
+          path: app/static
+          target: app/static
+          exec:
+            command: "python manage.py collectstatic --noinput -v 0"
+        - action: rebuild
+          path: pyproject.toml
+        - action: rebuild
+          path: uv.lock
 
   worker:
-    image: myapp-app:${VERSION:-latest}
+    image: django5-boiler-app:latest
     env_file: settings.env
     command: "celery -A project worker -l INFO -c 2"
     deploy:
@@ -64,9 +95,13 @@ services:
     #  - data_dir:/data
     depends_on:
       - redis
+    develop:
+      watch:
+        - action: restart
+          path: app/**/*.py
 
   beat:
-    image: myapp-app:${VERSION:-latest}
+    image: django5-boiler-app:latest
     env_file: settings.env
     command: "celery -A project beat -l INFO -S django"
     deploy:

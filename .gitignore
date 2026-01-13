@@ -1,15 +1,23 @@
+# Generic
 .idea/
 *.iml
 .vscode/
-**/dist/
-**/__pycache__/
-**/venv/
+.venv/
+venv/
+__pycache__/
+*.egg-info/
+node_modules/
+build/
+dist/
+.*cache
+*.log
 *.pyc
 .coverage
+coverage.xml
+# App
 .env
 .secrets
 .vars
 settings.env
 *.sqlite3
-node_modules/
 app/static/bootstrap/bootstrap.css

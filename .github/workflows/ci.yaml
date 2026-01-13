@@ -31,10 +31,11 @@ on:
       - ".github/workflows/ci.yaml"
       - "app/**"
       - "nginx/**"
+      - "docker-compose-swarm.yaml"
       - "gulpfile.js"
       - "package*.json"
       - "pyproject.toml"
-      - "docker-compose-swarm.yaml"
+      - "uv.lock"
 
 env:
   config-path: shane/django5-boiler
@@ -64,13 +65,16 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: "Debug event.json"
-        if: ${{ !cancelled() }}
         continue-on-error: true
-        run: |
-          cat "${GITHUB_EVENT_PATH}"
+        run: cat "${GITHUB_EVENT_PATH}"
+      - name: "Debug CTX github"
+        continue-on-error: true
+        env:
+          GITHUB_CTX: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CTX"
 
       - name: "Debug"
         continue-on-error: true
@@ -91,36 +95,14 @@ jobs:
 
       - name: "Setup Node 24"
         if: ${{ env.build == 'true' }}
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: 24
-
-      #- name: "Set Cache Directory"
-      #  if: ${{ env.build == 'true' }}
-      #  id: npm-cache-dir
-      #  shell: bash
-      #  run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
-
-      #- name: "Node Cache"
-      #  if: ${{ env.build == 'true' }}
-      #  uses: actions/cache@v4
-      #  id: npm-cache
-      #  with:
-      #    path: ${{ steps.npm-cache-dir.outputs.dir }}
-      #    key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-      #    restore-keys: |
-      #      ${{ runner.os }}-node-
-
-      #- name: "Node Cache Hit"
-      #  if: ${{ steps.npm-cache.outputs.cache-hit }}
-      #  run: |
-      #    echo "dir: '${{ steps.npm-cache-dir.outputs.dir }}'"
-      #    echo "cache-hit: '${{ steps.npm-cache.outputs.cache-hit }}'"
 
       - name: "Install Node"
         if: ${{ env.build == 'true' }}
         run: |
-          npm install
+          npm ci
 
       - name: "Update SW Cache Version"
         if: ${{ env.build == 'true' }}
