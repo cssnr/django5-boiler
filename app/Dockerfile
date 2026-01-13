@@ -20,6 +20,6 @@ RUN addgroup -g 1000 app  &&\
 WORKDIR /app
 COPY --chown=app:app pyproject.toml uv.lock ./
 RUN uv sync
-COPY --chown=app:app app ./
+COPY --chown=app:app app .
 USER app
 ENTRYPOINT ["sh", "docker-entrypoint.sh"]
