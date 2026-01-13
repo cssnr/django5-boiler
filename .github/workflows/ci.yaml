@@ -110,8 +110,8 @@ jobs:
           SERVICE_WORKER: app/static/js/sw.js
         run: |
           echo "Updating SW Cache to: v${GITHUB_RUN_NUMBER}"
-          sed -i "0,/v1/s//v${GITHUB_RUN_NUMBER}/" ${SERVICE_WORKER}
-          head ${SERVICE_WORKER} -n 4
+          sed -i "0,/v1/s//v${GITHUB_RUN_NUMBER}/" "${SERVICE_WORKER}"
+          head "${SERVICE_WORKER}" -n 4
 
       # END Custom - move to custom workflow
 

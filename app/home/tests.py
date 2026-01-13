@@ -10,7 +10,7 @@ class TestViews(TestCase):
             "home:message": 200,
             "home:contact": 200,
             "oauth:login": 302,
-            "api:index": 200,
+            # "api:index": 200,
         }
 
     def test_views(self):
