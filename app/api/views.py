@@ -63,7 +63,7 @@ def auth_from_token(view=None, no_fail=False):
 
 
 @csrf_exempt
-def api_view(request, path):
+def api_view(request, path=None):
     """
     View  /api/
     """
